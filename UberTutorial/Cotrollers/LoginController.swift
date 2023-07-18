@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 final class LoginController: UIViewController {
     
@@ -49,10 +50,10 @@ final class LoginController: UIViewController {
     
     // MARK: - TextField
     private let emailTextField: UITextField = {
-        return UITextField().textField(withPlaceholer: "Email", isSecureTextEntry: false)
+        return UITextField().textField(withPlaceholder: "Email")
     }()
     private let passwordTextField: UITextField = {
-        return UITextField().textField(withPlaceholer: "pasword", isSecureTextEntry: true)
+        return UITextField().textField(withPlaceholder: "pasword", isSecureTextEntry: true)
     }()
     
     
@@ -63,6 +64,8 @@ final class LoginController: UIViewController {
         
         btn.setTitle("Log In", for: .normal)
         btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        
+        btn.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         
         return btn
     }()
@@ -114,7 +117,33 @@ final class LoginController: UIViewController {
         
         navigationController?.pushViewController(signUpController, animated: true)
     }
-    
+    @objc private func handleLogin() {
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
+        
+        Auth.auth().signIn(withEmail: email, password: password) { result, error in
+            
+            // error
+            if let error = error {
+                print("DEGUB: Failed to log  user in with error \(error.localizedDescription)")
+                return
+            }
+
+            
+            guard let controller = UIApplication.shared.keyWindow?.rootViewController as? HomeController else { return }
+            
+            // mapkit 활성화
+            controller.configureUI()
+            
+            // HomeController로 이동
+            self.dismiss(animated: true)
+            print("Successfully logged user in")
+            
+        }
+        
+        
+        
+    }
     
     
     

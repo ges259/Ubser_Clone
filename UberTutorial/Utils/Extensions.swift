@@ -23,19 +23,24 @@ extension UIColor {
 
 // MARK: - TextField
 extension UITextField {
-    func textField(withPlaceholer placeholer: String, isSecureTextEntry: Bool) -> UITextField {
+    
+    func textField(withPlaceholder placeholder: String, isSecureTextEntry: Bool? = false) -> UITextField {
         let tf = UITextField()
         
         tf.borderStyle = .none
         tf.font = UIFont.systemFont(ofSize: 16)
         tf.textColor = .white
         tf.attributedPlaceholder = NSAttributedString(
-            string: placeholer,
+            string: placeholder,
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray]
         )
         tf.autocapitalizationType = .none
         tf.autocorrectionType = .no
-        tf.isSecureTextEntry = isSecureTextEntry
+        
+        tf.keyboardType = .emailAddress
+        tf.isSecureTextEntry = isSecureTextEntry ?? false
+        tf.textContentType = .oneTimeCode
+        
         return tf
     }
 }

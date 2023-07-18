@@ -7,8 +7,7 @@ target 'UberTutorial' do
 
   # Pods for UberTutorial
   pod 'Firebase/Core'
-  pod 'Firebase/Database'
   pod 'Firebase/Auth'
   pod 'Firebase/Storage'
-  pod 'GeoFire', '>= 1.1'
+  pod 'Firebase/Database'
 end

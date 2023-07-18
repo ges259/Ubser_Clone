@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import FirebaseAuth
+import FirebaseDatabase
 
 final class SignUpController: UIViewController {
     
@@ -64,13 +66,13 @@ final class SignUpController: UIViewController {
     
     // MARK: - TextField
     private let emailTextField: UITextField = {
-        return UITextField().textField(withPlaceholer: "Email", isSecureTextEntry: false)
+        return UITextField().textField(withPlaceholder: "Email")
     }()
     private let fullNameTextField: UITextField = {
-        return UITextField().textField(withPlaceholer: "FullName", isSecureTextEntry: false)
+        return UITextField().textField(withPlaceholder: "FullName")
     }()
     private let passwordTextField: UITextField = {
-        return UITextField().textField(withPlaceholer: "pasword", isSecureTextEntry: true)
+        return UITextField().textField(withPlaceholder: "pasword", isSecureTextEntry: true)
     }()
     
     
@@ -81,6 +83,8 @@ final class SignUpController: UIViewController {
         
         btn.setTitle("Sign Up", for: .normal)
         btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        
+        btn.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
 
         return btn
     }()
@@ -142,7 +146,48 @@ final class SignUpController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
-    
+    @objc private func handleSignUp() {
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else { return }
+        guard let fullName = fullNameTextField.text else { return }
+        let accountTypeIndex = accountTypeSegmentedControl.selectedSegmentIndex
+        
+        Auth.auth().createUser(withEmail: email, password: password) { result, error in
+            
+            // error
+            if let error = error {
+                print("Frailed to register user with error \(error)")
+                return
+            }
+            
+            // dictionary 만들기
+            let values = ["email": email,
+                          "fullName": fullName,
+                          "accountType": accountTypeIndex] as [String: Any]
+            
+            
+            // 유저의 아이디 불러오기
+            guard let uid = result?.user.uid else { return }
+            
+            
+            // dictionary를 바탕으로 uid에 유저에 관한 정보 업데이트
+            Database.database().reference().child("Users").child(uid).updateChildValues(values) { error, ref in
+                
+                guard let controller = UIApplication.shared.keyWindow?.rootViewController as? HomeController else { return }
+                
+                
+                
+                
+                
+                // mapkit 활성화
+                controller.configureUI()
+                
+                // HomeController로 이동
+                self.dismiss(animated: true)
+                print("Successfully registerd user and saved data..")
+            }
+        }
+    }
     
     
     
@@ -178,7 +223,10 @@ final class SignUpController: UIViewController {
         
     }
     
-    
+    private func configureNavigationBar() {
+        self.navigationController?.navigationBar.isHidden = true
+        self.navigationController?.navigationBar.barStyle = .black
+    }
     
     
     
@@ -192,6 +240,10 @@ final class SignUpController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.configureNavigationBar()
+        
         self.configureUI()
+        
+        
     }
 }

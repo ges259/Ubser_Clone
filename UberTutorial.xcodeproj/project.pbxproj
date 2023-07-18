@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5E84D6EB6B6E6299898EB8E6 /* Pods_UberTutorial.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35D4D98E07253A2273C6ACE2 /* Pods_UberTutorial.framework */; };
 		5F44144B2A65604500BAF781 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F44144A2A65604500BAF781 /* AppDelegate.swift */; };
 		5F44144D2A65604500BAF781 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F44144C2A65604500BAF781 /* SceneDelegate.swift */; };
 		5F4414542A65604600BAF781 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F4414532A65604600BAF781 /* Assets.xcassets */; };
@@ -17,6 +16,8 @@
 		5F4414692A659A9F00BAF781 /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4414682A659A9F00BAF781 /* SignUpController.swift */; };
 		5F44146B2A65A59700BAF781 /* AuthButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F44146A2A65A59700BAF781 /* AuthButton.swift */; };
 		5F44146D2A65B3CF00BAF781 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F44146C2A65B3CF00BAF781 /* GoogleService-Info.plist */; };
+		5FED97CE2A667D2B002D0FB9 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FED97CD2A667D2B002D0FB9 /* HomeController.swift */; };
+		FB300CF6A9C410B0C0D2AA31 /* Pods_UberTutorial.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35D4D98E07253A2273C6ACE2 /* Pods_UberTutorial.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,8 @@
 		5F4414682A659A9F00BAF781 /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
 		5F44146A2A65A59700BAF781 /* AuthButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthButton.swift; sourceTree = "<group>"; };
 		5F44146C2A65B3CF00BAF781 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5F8C3C2A2A6666920085C010 /* UberTutorial.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = UberTutorial.entitlements; sourceTree = "<group>"; };
+		5FED97CD2A667D2B002D0FB9 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		A169293E09EC2E20FD1A4968 /* Pods-UberTutorial.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UberTutorial.release.xcconfig"; path = "Target Support Files/Pods-UberTutorial/Pods-UberTutorial.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -41,7 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5E84D6EB6B6E6299898EB8E6 /* Pods_UberTutorial.framework in Frameworks */,
+				FB300CF6A9C410B0C0D2AA31 /* Pods_UberTutorial.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,6 +72,7 @@
 		5F4414492A65604500BAF781 /* UberTutorial */ = {
 			isa = PBXGroup;
 			children = (
+				5F8C3C2A2A6666920085C010 /* UberTutorial.entitlements */,
 				5F44144A2A65604500BAF781 /* AppDelegate.swift */,
 				5F44144C2A65604500BAF781 /* SceneDelegate.swift */,
 				5F4414632A65609700BAF781 /* Utils */,
@@ -103,6 +107,7 @@
 			children = (
 				5F4414642A6560F700BAF781 /* LoginController.swift */,
 				5F4414682A659A9F00BAF781 /* SignUpController.swift */,
+				5FED97CD2A667D2B002D0FB9 /* HomeController.swift */,
 			);
 			path = Cotrollers;
 			sourceTree = "<group>";
@@ -151,7 +156,7 @@
 				5F4414432A65604500BAF781 /* Sources */,
 				5F4414442A65604500BAF781 /* Frameworks */,
 				5F4414452A65604500BAF781 /* Resources */,
-				74AA32DE4BD30D0981BA8507 /* [CP] Embed Pods Frameworks */,
+				4BE3CF9705D4484E31472890 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -209,7 +214,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		74AA32DE4BD30D0981BA8507 /* [CP] Embed Pods Frameworks */ = {
+		4BE3CF9705D4484E31472890 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -257,6 +262,7 @@
 			files = (
 				5F4414692A659A9F00BAF781 /* SignUpController.swift in Sources */,
 				5F44146B2A65A59700BAF781 /* AuthButton.swift in Sources */,
+				5FED97CE2A667D2B002D0FB9 /* HomeController.swift in Sources */,
 				5F44144B2A65604500BAF781 /* AppDelegate.swift in Sources */,
 				5F44144D2A65604500BAF781 /* SceneDelegate.swift in Sources */,
 				5F4414652A6560F700BAF781 /* LoginController.swift in Sources */,
@@ -284,6 +290,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ANALYZER_SECURITY_KEYCHAIN_API = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -344,6 +351,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_ANALYZER_SECURITY_KEYCHAIN_API = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -398,6 +406,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_SECURITY_KEYCHAIN_API = YES;
+				CODE_SIGN_ENTITLEMENTS = UberTutorial/UberTutorial.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -425,6 +435,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_SECURITY_KEYCHAIN_API = YES;
+				CODE_SIGN_ENTITLEMENTS = UberTutorial/UberTutorial.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
