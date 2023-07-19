@@ -8,14 +8,12 @@
 import UIKit
 import FirebaseAuth
 import FirebaseDatabase
+import GeoFire
 
 final class SignUpController: UIViewController {
     
-    
-    
-    
-    
     // MARK: - Properties
+    private var location = LocationHandler.shared.locationManager.location
     
     
     
@@ -66,7 +64,8 @@ final class SignUpController: UIViewController {
     
     // MARK: - TextField
     private let emailTextField: UITextField = {
-        return UITextField().textField(withPlaceholder: "Email")
+        return UITextField().textField(withPlaceholder: "Email",
+                                       keyboardType: .emailAddress)
     }()
     private let fullNameTextField: UITextField = {
         return UITextField().textField(withPlaceholder: "FullName")
@@ -160,35 +159,42 @@ final class SignUpController: UIViewController {
                 return
             }
             
+            // 유저의 아이디 불러오기
+            guard let uid = result?.user.uid else { return }
+            
+            
             // dictionary 만들기
             let values = ["email": email,
                           "fullName": fullName,
                           "accountType": accountTypeIndex] as [String: Any]
             
-            
-            // 유저의 아이디 불러오기
-            guard let uid = result?.user.uid else { return }
-            
-            
-            // dictionary를 바탕으로 uid에 유저에 관한 정보 업데이트
-            Database.database().reference().child("Users").child(uid).updateChildValues(values) { error, ref in
+            // 운전자일 경우
+            if accountTypeIndex == 1 {
+                let geofire = GeoFire(firebaseRef: REF_DRIVER_LOCATIONS)
+                guard let location = self.location else { return }
                 
-                guard let controller = UIApplication.shared.keyWindow?.rootViewController as? HomeController else { return }
-                
-                
-                
-                
-                
-                // mapkit 활성화
-                controller.configureUI()
-                
-                // HomeController로 이동
-                self.dismiss(animated: true)
-                print("Successfully registerd user and saved data..")
+                geofire.setLocation(location, forKey: uid) { error in
+                    self.updateUserDataAndShowHomeController(uid: uid, values: values)
+                }
             }
+            self.updateUserDataAndShowHomeController(uid: uid, values: values)
         }
     }
     
+private func updateUserDataAndShowHomeController(uid: String, values: [String: Any]) {
+    // dictionary를 바탕으로 uid에 유저에 관한 정보 업데이트
+    REF_USERS.child(uid).updateChildValues(values) { error, ref in
+        
+        guard let controller = UIApplication.shared.keyWindow?.rootViewController as? HomeController else { return }
+        
+        // mapkit 활성화
+        controller.configureMapView()
+        
+        // HomeController로 이동
+        self.dismiss(animated: true)
+        print("Successfully registerd user and saved data..")
+    }
+}
     
     
     
@@ -240,10 +246,13 @@ final class SignUpController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // configure navigation bar
         self.configureNavigationBar()
         
+        // configure UI
         self.configureUI()
         
+        print("DEBUG: Location is \(self.location)")
         
     }
 }

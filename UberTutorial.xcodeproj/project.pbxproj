@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B14145D5A455116EEACBCA5 /* Pods_UberTutorial.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3F204E9AE8E456B3D7B0F94 /* Pods_UberTutorial.framework */; };
 		5F44144B2A65604500BAF781 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F44144A2A65604500BAF781 /* AppDelegate.swift */; };
 		5F44144D2A65604500BAF781 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F44144C2A65604500BAF781 /* SceneDelegate.swift */; };
 		5F4414542A65604600BAF781 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F4414532A65604600BAF781 /* Assets.xcassets */; };
@@ -16,12 +17,19 @@
 		5F4414692A659A9F00BAF781 /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4414682A659A9F00BAF781 /* SignUpController.swift */; };
 		5F44146B2A65A59700BAF781 /* AuthButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F44146A2A65A59700BAF781 /* AuthButton.swift */; };
 		5F44146D2A65B3CF00BAF781 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F44146C2A65B3CF00BAF781 /* GoogleService-Info.plist */; };
+		5F56A0DC2A6707CA00CD1825 /* LocationInputActivationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0DB2A6707CA00CD1825 /* LocationInputActivationView.swift */; };
+		5F56A0DE2A67A78B00CD1825 /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0DD2A67A78B00CD1825 /* Protocol.swift */; };
+		5F56A0E02A67ABC200CD1825 /* LocationInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0DF2A67ABC200CD1825 /* LocationInputView.swift */; };
+		5F56A0E62A67D50A00CD1825 /* LocationInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0E52A67D50A00CD1825 /* LocationInputCell.swift */; };
+		5F56A0E82A67D58D00CD1825 /* ReuseIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0E72A67D58D00CD1825 /* ReuseIdentifier.swift */; };
+		5F56A0EA2A6815B400CD1825 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0E92A6815B400CD1825 /* Service.swift */; };
+		5F56A0EC2A6817BA00CD1825 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0EB2A6817BA00CD1825 /* Constants.swift */; };
+		5F56A0EE2A68302800CD1825 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0ED2A68302800CD1825 /* User.swift */; };
+		5F56A0F02A6841C400CD1825 /* LocationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0EF2A6841C400CD1825 /* LocationHandler.swift */; };
 		5FED97CE2A667D2B002D0FB9 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FED97CD2A667D2B002D0FB9 /* HomeController.swift */; };
-		FB300CF6A9C410B0C0D2AA31 /* Pods_UberTutorial.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35D4D98E07253A2273C6ACE2 /* Pods_UberTutorial.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		35D4D98E07253A2273C6ACE2 /* Pods_UberTutorial.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UberTutorial.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D3FA4482245A1A14D4CB92B /* Pods-UberTutorial.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UberTutorial.debug.xcconfig"; path = "Target Support Files/Pods-UberTutorial/Pods-UberTutorial.debug.xcconfig"; sourceTree = "<group>"; };
 		5F4414472A65604500BAF781 /* UberTutorial.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UberTutorial.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F44144A2A65604500BAF781 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -34,9 +42,19 @@
 		5F4414682A659A9F00BAF781 /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
 		5F44146A2A65A59700BAF781 /* AuthButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthButton.swift; sourceTree = "<group>"; };
 		5F44146C2A65B3CF00BAF781 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5F56A0DB2A6707CA00CD1825 /* LocationInputActivationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInputActivationView.swift; sourceTree = "<group>"; };
+		5F56A0DD2A67A78B00CD1825 /* Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
+		5F56A0DF2A67ABC200CD1825 /* LocationInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInputView.swift; sourceTree = "<group>"; };
+		5F56A0E52A67D50A00CD1825 /* LocationInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInputCell.swift; sourceTree = "<group>"; };
+		5F56A0E72A67D58D00CD1825 /* ReuseIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReuseIdentifier.swift; sourceTree = "<group>"; };
+		5F56A0E92A6815B400CD1825 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
+		5F56A0EB2A6817BA00CD1825 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		5F56A0ED2A68302800CD1825 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		5F56A0EF2A6841C400CD1825 /* LocationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHandler.swift; sourceTree = "<group>"; };
 		5F8C3C2A2A6666920085C010 /* UberTutorial.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = UberTutorial.entitlements; sourceTree = "<group>"; };
 		5FED97CD2A667D2B002D0FB9 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		A169293E09EC2E20FD1A4968 /* Pods-UberTutorial.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UberTutorial.release.xcconfig"; path = "Target Support Files/Pods-UberTutorial/Pods-UberTutorial.release.xcconfig"; sourceTree = "<group>"; };
+		E3F204E9AE8E456B3D7B0F94 /* Pods_UberTutorial.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UberTutorial.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,7 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FB300CF6A9C410B0C0D2AA31 /* Pods_UberTutorial.framework in Frameworks */,
+				4B14145D5A455116EEACBCA5 /* Pods_UberTutorial.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,6 +109,7 @@
 		5F44145F2A65607700BAF781 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				5F56A0ED2A68302800CD1825 /* User.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -98,6 +117,9 @@
 		5F4414602A65607B00BAF781 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5F56A0DB2A6707CA00CD1825 /* LocationInputActivationView.swift */,
+				5F56A0DF2A67ABC200CD1825 /* LocationInputView.swift */,
+				5F56A0E52A67D50A00CD1825 /* LocationInputCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -115,6 +137,7 @@
 		5F4414622A65609200BAF781 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				5F56A0E92A6815B400CD1825 /* Service.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -124,6 +147,10 @@
 			children = (
 				5F4414662A6573CE00BAF781 /* Extensions.swift */,
 				5F44146A2A65A59700BAF781 /* AuthButton.swift */,
+				5F56A0DD2A67A78B00CD1825 /* Protocol.swift */,
+				5F56A0E72A67D58D00CD1825 /* ReuseIdentifier.swift */,
+				5F56A0EB2A6817BA00CD1825 /* Constants.swift */,
+				5F56A0EF2A6841C400CD1825 /* LocationHandler.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -140,7 +167,7 @@
 		B4504D0975F6E3F6DFF97B16 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				35D4D98E07253A2273C6ACE2 /* Pods_UberTutorial.framework */,
+				E3F204E9AE8E456B3D7B0F94 /* Pods_UberTutorial.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -156,7 +183,7 @@
 				5F4414432A65604500BAF781 /* Sources */,
 				5F4414442A65604500BAF781 /* Frameworks */,
 				5F4414452A65604500BAF781 /* Resources */,
-				4BE3CF9705D4484E31472890 /* [CP] Embed Pods Frameworks */,
+				AB59BED0EE7CACF9BDD2C442 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -214,7 +241,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4BE3CF9705D4484E31472890 /* [CP] Embed Pods Frameworks */ = {
+		AB59BED0EE7CACF9BDD2C442 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -261,12 +288,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				5F4414692A659A9F00BAF781 /* SignUpController.swift in Sources */,
+				5F56A0EA2A6815B400CD1825 /* Service.swift in Sources */,
 				5F44146B2A65A59700BAF781 /* AuthButton.swift in Sources */,
 				5FED97CE2A667D2B002D0FB9 /* HomeController.swift in Sources */,
 				5F44144B2A65604500BAF781 /* AppDelegate.swift in Sources */,
+				5F56A0E02A67ABC200CD1825 /* LocationInputView.swift in Sources */,
 				5F44144D2A65604500BAF781 /* SceneDelegate.swift in Sources */,
+				5F56A0F02A6841C400CD1825 /* LocationHandler.swift in Sources */,
+				5F56A0DE2A67A78B00CD1825 /* Protocol.swift in Sources */,
+				5F56A0EE2A68302800CD1825 /* User.swift in Sources */,
+				5F56A0E82A67D58D00CD1825 /* ReuseIdentifier.swift in Sources */,
 				5F4414652A6560F700BAF781 /* LoginController.swift in Sources */,
+				5F56A0DC2A6707CA00CD1825 /* LocationInputActivationView.swift in Sources */,
+				5F56A0EC2A6817BA00CD1825 /* Constants.swift in Sources */,
 				5F4414672A6573CF00BAF781 /* Extensions.swift in Sources */,
+				5F56A0E62A67D50A00CD1825 /* LocationInputCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -24,26 +24,178 @@ extension UIColor {
 // MARK: - TextField
 extension UITextField {
     
-    func textField(withPlaceholder placeholder: String, isSecureTextEntry: Bool? = false) -> UITextField {
+    func textField(withPlaceholder placeholder: String,
+                   isSecureTextEntry: Bool? = false,
+                   backgroundColor: UIColor? = UIColor.clear,
+                   textColor: UIColor? = .white,
+                   fontSize: CGFloat? = 16,
+                   keyboardType: UIKeyboardType = .webSearch,
+                   paddingLeftView: Bool? = false)
+    
+    -> UITextField {
+        
         let tf = UITextField()
         
-        tf.borderStyle = .none
-        tf.font = UIFont.systemFont(ofSize: 16)
-        tf.textColor = .white
+        
+        // set keyboardType
+        tf.keyboardType = keyboardType
+        
+        // set text color
+        tf.textColor = textColor
+        
+        // set font size
+        tf.font = UIFont.systemFont(ofSize: fontSize!)
+        
+        // set background color
+        tf.backgroundColor = backgroundColor
+        
+        // set placeholder
         tf.attributedPlaceholder = NSAttributedString(
             string: placeholder,
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.lightGray]
         )
+        // padding Left View
+        if paddingLeftView! {
+            let paddingView = UIView()
+            paddingView.anchor(width: 8, height: 30)
+            tf.leftView = paddingView
+            tf.leftViewMode = .always
+        }
+        
+        
+        
+        tf.borderStyle = .none
+        
         tf.autocapitalizationType = .none
         tf.autocorrectionType = .no
         
-        tf.keyboardType = .emailAddress
         tf.isSecureTextEntry = isSecureTextEntry ?? false
         tf.textContentType = .oneTimeCode
         
         return tf
     }
 }
+
+
+// MARK: - enum
+enum FontStyle {
+    case system
+    case bold
+    case AvenirLight
+}
+
+
+// MARK: - UILabel
+extension UILabel {
+    
+    func label(labelText: String? = nil,
+               LabelTextColor: UIColor? = .darkGray,
+               fontName: FontStyle? = .system,
+               fontSize: CGFloat? = nil)
+    -> UILabel {
+        
+        let lbl = UILabel()
+        
+        // text
+        if let labelText = labelText {
+            lbl.text = labelText
+            lbl.textColor = LabelTextColor
+        }
+        // font
+        if let fontSize = fontSize {
+            if fontName == .system {
+                lbl.font = UIFont.systemFont(ofSize: fontSize)
+            } else if fontName == .bold {
+                lbl.font = UIFont.boldSystemFont(ofSize: fontSize)
+            } else {
+                lbl.font = UIFont(name: "Avenir-Light", size: fontSize)
+            }
+        }
+        
+        return lbl
+    }
+}
+
+
+
+// MARK: - UIStackView
+
+extension UIStackView {
+    
+    func stackView(arrangedSubviews: [UIView],
+                   axis: NSLayoutConstraint.Axis? = .vertical,
+                   distribution: UIStackView.Distribution? = nil,
+                   spacing: CGFloat? = nil,
+                   alignment: UIStackView.Alignment? = nil)
+    -> UIStackView {
+        
+        let stv = UIStackView(arrangedSubviews: arrangedSubviews)
+        
+        if let axis = axis {
+            stv.axis = axis
+        }
+        if let distribution = distribution {
+            stv.distribution = distribution
+        }
+        if let spacing = spacing {
+            stv.spacing = spacing
+        }
+        if let alignment = alignment {
+            stv.alignment = alignment
+        }
+        return stv
+    }
+}
+
+
+
+
+
+
+
+
+
+//// MARK: - UIButton
+//extension UIButton {
+//
+//    func button(type: UIButton.ButtonType,
+//                title: String? = "",
+//                textColor: UIColor? = UIColor.black,
+//                fontName: FontStyle? = .system,
+//                fontSize: CGFloat? = 18,
+//                image: String? = nil) {
+//        // type
+//        let btn = UIButton(type: type)
+//
+//        // text
+//        if let title = title {
+//            btn.setTitle(title, for: .normal)
+//            btn.titleLabel?.textColor = textColor
+//        }
+//
+//        // font
+//        if let fontSize = fontSize {
+//            if fontName == .system {
+//                btn.titleLabel?.font = UIFont.systemFont(ofSize: fontSize)
+//            } else if fontName == .bold {
+//                btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: fontSize)
+//            } else {
+//                btn.titleLabel?.font = UIFont(name: "Avenir-Light", size: fontSize)
+//            }
+//        }
+//
+//        // image
+//        if let image = image {
+//            btn.setImage(#imageLiteral(resourceName: image), for: .normal)
+//        }
+//    }
+//}
+
+
+
+
+
+
 
 
 
@@ -166,6 +318,29 @@ extension UIView {
         if let centerY = centerY {
             self.centerYAnchor.constraint(equalTo: centerY.centerYAnchor, constant: paddingCenterY).isActive = true
         }
+    }
+    
+    
+    
+    
+    // MARK: - Shadow
+    func addShadow() {
+        // shadow setting
+        self.layer.shadowColor = UIColor.black.cgColor
+        // 그림자를 얼마나 어둡게 할지
+        self.layer.shadowOpacity = 0.45
+        self.layer.shadowOffset = CGSize(width: 0.5, height: 0.5)
+        self.layer.masksToBounds = false
+    }
+    
+    
+    
+    func backgrouncColorView(backgroundColor color: UIColor) -> UIView {
+        let view = UIView()
+        
+        view.backgroundColor = color
+        
+        return view
     }
 }
 

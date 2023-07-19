@@ -12,23 +12,19 @@ final class LoginController: UIViewController {
     
     // MARK: - ImageView
     private let emailImageView: UIImageView = {
-        let img = UIImageView()
-        
-        return img
+        return UIImageView()
     }()
-    
+
     
     
     // MARK: - Label
     private let titleLabel: UILabel = {
-        let lbl = UILabel ()
-        
-        lbl.text = "UBER"
-        lbl.font = UIFont(name: "Avenir-Light", size: 36)
-        lbl.textColor = UIColor(white: 1, alpha: 0.8)
-        
-        return lbl
+        return UILabel().label(labelText: "UBER",
+                               LabelTextColor: UIColor(white: 1, alpha: 0.8),
+                               fontName: .AvenirLight,
+                               fontSize: 36)
     }()
+    
     
     
     
@@ -133,7 +129,7 @@ final class LoginController: UIViewController {
             guard let controller = UIApplication.shared.keyWindow?.rootViewController as? HomeController else { return }
             
             // mapkit 활성화
-            controller.configureUI()
+            controller.configureMapView()
             
             // HomeController로 이동
             self.dismiss(animated: true)
