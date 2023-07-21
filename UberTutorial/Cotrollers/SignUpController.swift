@@ -21,14 +21,22 @@ final class SignUpController: UIViewController {
     
     // MARK: - Label
     private let titleLabel: UILabel = {
-        let lbl = UILabel ()
-        
-        lbl.text = "UBER"
-        lbl.font = UIFont(name: "Avenir-Light", size: 36)
-        lbl.textColor = UIColor(white: 1, alpha: 0.8)
-        
-        return lbl
+        return UILabel().label(labelText: "UBER",
+                               LabelTextColor: UIColor(white: 1, alpha: 0.8),
+                               fontName: .system,
+                               fontSize: 36)
     }()
+    
+    /*
+     let lbl = UILabel ()
+     
+     lbl.text = "UBER"
+//        lbl.font = UIFont(name: "Avenir-Light", size: 36)
+     lbl.font = UIFont(name: "Avenir-Light", size: 36)
+     lbl.textColor = UIColor(white: 1, alpha: 0.8)
+     
+     return lbl
+     */
     
     
     
@@ -164,9 +172,9 @@ final class SignUpController: UIViewController {
             
             
             // dictionary 만들기
-            let values = ["email": email,
-                          "fullName": fullName,
-                          "accountType": accountTypeIndex] as [String: Any]
+            let values = [DB_String.email: email,
+                          DB_String.fullName: fullName,
+                          DB_String.accountType: accountTypeIndex] as [String: Any]
             
             // 운전자일 경우
             if accountTypeIndex == 1 {
@@ -216,10 +224,10 @@ private func updateUserDataAndShowHomeController(uid: String, values: [String: A
         
         self.view.addSubview(self.stackView)
         self.stackView.anchor(top: self.titleLabel.bottomAnchor,
-                              leading: self.view.leadingAnchor,
-                              trailing: self.view.trailingAnchor,
                               paddingTop: 40,
+                              leading: self.view.leadingAnchor,
                               paddingLeading: 16,
+                              trailing: self.view.trailingAnchor,
                               paddingTrailing: 16)
         
         self.view.addSubview(self.alreadyHaveButton)

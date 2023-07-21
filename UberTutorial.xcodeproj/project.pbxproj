@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4B14145D5A455116EEACBCA5 /* Pods_UberTutorial.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3F204E9AE8E456B3D7B0F94 /* Pods_UberTutorial.framework */; };
+		5F2B29612A6A720000385E4C /* Trip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2B29602A6A720000385E4C /* Trip.swift */; };
+		5F2B29632A6A8D4400385E4C /* PickupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2B29622A6A8D4400385E4C /* PickupController.swift */; };
 		5F44144B2A65604500BAF781 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F44144A2A65604500BAF781 /* AppDelegate.swift */; };
 		5F44144D2A65604500BAF781 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F44144C2A65604500BAF781 /* SceneDelegate.swift */; };
 		5F4414542A65604600BAF781 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F4414532A65604600BAF781 /* Assets.xcassets */; };
@@ -21,11 +23,12 @@
 		5F56A0DE2A67A78B00CD1825 /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0DD2A67A78B00CD1825 /* Protocol.swift */; };
 		5F56A0E02A67ABC200CD1825 /* LocationInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0DF2A67ABC200CD1825 /* LocationInputView.swift */; };
 		5F56A0E62A67D50A00CD1825 /* LocationInputCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0E52A67D50A00CD1825 /* LocationInputCell.swift */; };
-		5F56A0E82A67D58D00CD1825 /* ReuseIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0E72A67D58D00CD1825 /* ReuseIdentifier.swift */; };
+		5F56A0E82A67D58D00CD1825 /* String_Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0E72A67D58D00CD1825 /* String_Constants.swift */; };
 		5F56A0EA2A6815B400CD1825 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0E92A6815B400CD1825 /* Service.swift */; };
-		5F56A0EC2A6817BA00CD1825 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0EB2A6817BA00CD1825 /* Constants.swift */; };
+		5F56A0EC2A6817BA00CD1825 /* DB_Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0EB2A6817BA00CD1825 /* DB_Constants.swift */; };
 		5F56A0EE2A68302800CD1825 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0ED2A68302800CD1825 /* User.swift */; };
 		5F56A0F02A6841C400CD1825 /* LocationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0EF2A6841C400CD1825 /* LocationHandler.swift */; };
+		5F9A9D322A6B15C600A304F2 /* Enum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9A9D312A6B15C600A304F2 /* Enum.swift */; };
 		5F9EB6532A6932440043E6C7 /* DriverAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9EB6522A6932440043E6C7 /* DriverAnnotation.swift */; };
 		5F9EB6552A69AFCF0043E6C7 /* RideActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9EB6542A69AFCF0043E6C7 /* RideActionView.swift */; };
 		5FED97CE2A667D2B002D0FB9 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FED97CD2A667D2B002D0FB9 /* HomeController.swift */; };
@@ -33,6 +36,8 @@
 
 /* Begin PBXFileReference section */
 		3D3FA4482245A1A14D4CB92B /* Pods-UberTutorial.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UberTutorial.debug.xcconfig"; path = "Target Support Files/Pods-UberTutorial/Pods-UberTutorial.debug.xcconfig"; sourceTree = "<group>"; };
+		5F2B29602A6A720000385E4C /* Trip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trip.swift; sourceTree = "<group>"; };
+		5F2B29622A6A8D4400385E4C /* PickupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickupController.swift; sourceTree = "<group>"; };
 		5F4414472A65604500BAF781 /* UberTutorial.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UberTutorial.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F44144A2A65604500BAF781 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5F44144C2A65604500BAF781 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -48,12 +53,13 @@
 		5F56A0DD2A67A78B00CD1825 /* Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
 		5F56A0DF2A67ABC200CD1825 /* LocationInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInputView.swift; sourceTree = "<group>"; };
 		5F56A0E52A67D50A00CD1825 /* LocationInputCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInputCell.swift; sourceTree = "<group>"; };
-		5F56A0E72A67D58D00CD1825 /* ReuseIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReuseIdentifier.swift; sourceTree = "<group>"; };
+		5F56A0E72A67D58D00CD1825 /* String_Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String_Constants.swift; sourceTree = "<group>"; };
 		5F56A0E92A6815B400CD1825 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
-		5F56A0EB2A6817BA00CD1825 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		5F56A0EB2A6817BA00CD1825 /* DB_Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB_Constants.swift; sourceTree = "<group>"; };
 		5F56A0ED2A68302800CD1825 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		5F56A0EF2A6841C400CD1825 /* LocationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHandler.swift; sourceTree = "<group>"; };
 		5F8C3C2A2A6666920085C010 /* UberTutorial.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = UberTutorial.entitlements; sourceTree = "<group>"; };
+		5F9A9D312A6B15C600A304F2 /* Enum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enum.swift; sourceTree = "<group>"; };
 		5F9EB6522A6932440043E6C7 /* DriverAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverAnnotation.swift; sourceTree = "<group>"; };
 		5F9EB6542A69AFCF0043E6C7 /* RideActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideActionView.swift; sourceTree = "<group>"; };
 		5FED97CD2A667D2B002D0FB9 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
@@ -115,6 +121,7 @@
 			children = (
 				5F56A0ED2A68302800CD1825 /* User.swift */,
 				5F9EB6522A6932440043E6C7 /* DriverAnnotation.swift */,
+				5F2B29602A6A720000385E4C /* Trip.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -136,6 +143,7 @@
 				5F4414642A6560F700BAF781 /* LoginController.swift */,
 				5F4414682A659A9F00BAF781 /* SignUpController.swift */,
 				5FED97CD2A667D2B002D0FB9 /* HomeController.swift */,
+				5F2B29622A6A8D4400385E4C /* PickupController.swift */,
 			);
 			path = Cotrollers;
 			sourceTree = "<group>";
@@ -154,9 +162,10 @@
 				5F4414662A6573CE00BAF781 /* Extensions.swift */,
 				5F44146A2A65A59700BAF781 /* AuthButton.swift */,
 				5F56A0DD2A67A78B00CD1825 /* Protocol.swift */,
-				5F56A0E72A67D58D00CD1825 /* ReuseIdentifier.swift */,
-				5F56A0EB2A6817BA00CD1825 /* Constants.swift */,
+				5F56A0E72A67D58D00CD1825 /* String_Constants.swift */,
+				5F56A0EB2A6817BA00CD1825 /* DB_Constants.swift */,
 				5F56A0EF2A6841C400CD1825 /* LocationHandler.swift */,
+				5F9A9D312A6B15C600A304F2 /* Enum.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -303,12 +312,15 @@
 				5F44144D2A65604500BAF781 /* SceneDelegate.swift in Sources */,
 				5F56A0F02A6841C400CD1825 /* LocationHandler.swift in Sources */,
 				5F56A0DE2A67A78B00CD1825 /* Protocol.swift in Sources */,
+				5F2B29612A6A720000385E4C /* Trip.swift in Sources */,
+				5F9A9D322A6B15C600A304F2 /* Enum.swift in Sources */,
 				5F9EB6552A69AFCF0043E6C7 /* RideActionView.swift in Sources */,
 				5F56A0EE2A68302800CD1825 /* User.swift in Sources */,
-				5F56A0E82A67D58D00CD1825 /* ReuseIdentifier.swift in Sources */,
+				5F2B29632A6A8D4400385E4C /* PickupController.swift in Sources */,
+				5F56A0E82A67D58D00CD1825 /* String_Constants.swift in Sources */,
 				5F4414652A6560F700BAF781 /* LoginController.swift in Sources */,
 				5F56A0DC2A6707CA00CD1825 /* LocationInputActivationView.swift in Sources */,
-				5F56A0EC2A6817BA00CD1825 /* Constants.swift in Sources */,
+				5F56A0EC2A6817BA00CD1825 /* DB_Constants.swift in Sources */,
 				5F4414672A6573CF00BAF781 /* Extensions.swift in Sources */,
 				5F56A0E62A67D50A00CD1825 /* LocationInputCell.swift in Sources */,
 			);

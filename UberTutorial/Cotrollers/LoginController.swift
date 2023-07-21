@@ -21,7 +21,7 @@ final class LoginController: UIViewController {
     private let titleLabel: UILabel = {
         return UILabel().label(labelText: "UBER",
                                LabelTextColor: UIColor(white: 1, alpha: 0.8),
-                               fontName: .AvenirLight,
+                               fontName: .system,
                                fontSize: 36)
     }()
     
@@ -159,10 +159,10 @@ final class LoginController: UIViewController {
         
         self.view.addSubview(self.stackView)
         self.stackView.anchor(top: self.titleLabel.bottomAnchor,
-                              leading: self.view.leadingAnchor,
-                              trailing: self.view.trailingAnchor,
                               paddingTop: 40,
+                              leading: self.view.leadingAnchor,
                               paddingLeading: 16,
+                              trailing: self.view.trailingAnchor,
                               paddingTrailing: 16)
         
         self.view.addSubview(self.dontHaveAccountButton)

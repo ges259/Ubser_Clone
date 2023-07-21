@@ -16,4 +16,13 @@ protocol LocationInputViewDelegate: AnyObject {
     func executeSearch(query: String)
 }
 
+protocol RideActionViewDelegate: AnyObject {
+//    func uploadTrip(_ view: RideActionView)
+    func uploadTrip()
+}
+
+protocol PickupControllerDelegate: AnyObject {
+    func didAcceptTrip(_ trip: Trip)
+}
+
 

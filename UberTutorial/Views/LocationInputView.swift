@@ -105,8 +105,8 @@ final class LocationInputView: UIView {
         
         self.addSubview(self.backButton)
         self.backButton.anchor(top: self.safeAreaLayoutGuide.topAnchor,
-                               leading: self.leadingAnchor,
                                paddingTop: 0,
+                               leading: self.leadingAnchor,
                                paddingLeading: 12,
                                width: 30,
                                height: 30)
@@ -117,19 +117,19 @@ final class LocationInputView: UIView {
 
         self.addSubview(self.startingLocationTextField)
         self.startingLocationTextField.anchor(top: self.backButton.bottomAnchor,
-                                              leading: self.leadingAnchor,
-                                              trailing: self.trailingAnchor,
                                               paddingTop: 4,
+                                              leading: self.leadingAnchor,
                                               paddingLeading: 40,
+                                              trailing: self.trailingAnchor,
                                               paddingTrailing: 40,
                                               height: 30)
         
         self.addSubview(self.destinationLocationTextField)
         self.destinationLocationTextField.anchor(top: self.startingLocationTextField.bottomAnchor,
-                                                 leading: self.leadingAnchor,
-                                                 trailing: self.trailingAnchor,
                                                  paddingTop: 12,
+                                                 leading: self.leadingAnchor,
                                                  paddingLeading: 40,
+                                                 trailing: self.trailingAnchor,
                                                  paddingTrailing: 40,
                                                  height: 30)
         
@@ -151,8 +151,8 @@ final class LocationInputView: UIView {
         
         self.addSubview(self.linkingView)
         self.linkingView.anchor(top: self.startLocationIndicatorView.bottomAnchor,
-                                bottom: self.destinationIndicatorView.topAnchor,
                                 paddingTop: 4,
+                                bottom: self.destinationIndicatorView.topAnchor,
                                 paddingBottom: 4,
                                 width: 0.5,
                                 centerX: self.startLocationIndicatorView)
@@ -180,7 +180,4 @@ extension LocationInputView: UITextFieldDelegate {
         
         return true
     }
-    
-    
-    
 }

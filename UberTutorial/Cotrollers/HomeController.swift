@@ -9,14 +9,6 @@ import UIKit
 import FirebaseAuth
 import MapKit
 
-private enum ActionButtonConfiguration {
-    case ShowMenu
-    case dismissActionView
-    
-    init() {
-        self = .ShowMenu
-    }
-}
 
 
 
@@ -31,17 +23,6 @@ final class HomeController: UIViewController {
     private let rideActionView = RideActionView()
     private let tableView = UITableView()
     
-    // 싱글톤
-    private let service = Service.shared
-    
-    // fullName
-    private var user: User? {
-        didSet {
-            self.locationInputView.user = user
-        }
-    }
-    
-    
     // enum 초기화
     private var actionButtonConfig = ActionButtonConfiguration()
     
@@ -49,6 +30,57 @@ final class HomeController: UIViewController {
     
     // 검색 후 찾은 배열
     private var searchResults = [MKPlacemark]()
+    
+    
+    // 싱글톤
+    private let service = Service.shared
+    
+    // fullName
+    private var user: User? {
+        didSet {
+            self.locationInputView.user = user
+            
+            // 유저가 passenger인 경우
+            if user?.accountType == .passenger {
+                print("DEBUG: User id Passenger")
+                // 주변 driver의 위치를 가져오기
+                self.fetchDrivers()
+                
+                // 검색 Label을 띄움
+                self.configureLocationInputActivationView()
+                
+                //
+                self.observeCurrentTrip()
+                
+                
+            // 유저가 driver인 경우
+            } else {
+                // passenger가 driver찾기 버튼을 누르면
+                // 주변 driver에서 실행 됨
+                self.observeTrips()
+                
+            }
+        }
+    }
+    
+    private var trip: Trip? {
+        didSet {
+            guard let user = user else { return }
+            
+            if user.accountType == .driver {
+                
+                guard let trip = trip else { return }
+                
+                let pickupController = PickupController(trip: trip)
+                pickupController.delegate = self
+                pickupController.modalPresentationStyle = .fullScreen
+                
+                self.present(pickupController, animated: true)
+            } else {
+                print("DEBUG: Show ride action view for accepted trip..")
+            }
+        }
+    }
     
     
     
@@ -66,16 +98,11 @@ final class HomeController: UIViewController {
     
     
     
-    
-    
-    
-    
-    
-    
     // MARK: - Selectors
     @objc private func actionButtonPressed() {
         switch actionButtonConfig {
         case .ShowMenu:
+            print("DEBUG: USER ID IS \(user?.uid)")
             print("DEBUG: Handle show menu..")
         case .dismissActionView:
             // 주석 및 polyline삭제
@@ -95,15 +122,7 @@ final class HomeController: UIViewController {
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    // MARK: - Helper Functions
+    // MARK: - Configure UI
     private func configureUI() {
         // 맵뷰 생성
         self.configureMapView()
@@ -111,31 +130,30 @@ final class HomeController: UIViewController {
         
         self.view.addSubview(self.actionButton)
         self.actionButton.anchor(top: self.view.safeAreaLayoutGuide.topAnchor,
-                                 leading: self.view.leadingAnchor,
                                  paddingTop: 0,
+                                 leading: self.view.leadingAnchor,
                                  paddingLeading: 12,
                                  width: 30,
                                  height: 30)
-        
+        // table view
+        self.configureTableView()
+    }
+    private func configureLocationInputActivationView() {
+        self.view.addSubview(self.inputActivationView)
         // delegate설정
         self.inputActivationView.delegate = self
-        
-        self.view.addSubview(self.inputActivationView)
+        self.inputActivationView.alpha = 0
         self.inputActivationView.anchor(top: self.actionButton.bottomAnchor,
                                         paddingTop: 30,
                                         width: self.view.frame.width - 64,
                                         height: 50,
                                         centerX: self.view)
-        
-        self.inputActivationView.alpha = 0
-        
         UIView.animate(withDuration: 2) {
             self.inputActivationView.alpha = 1
         }
-        
-        // table view
-        self.configureTableView()
     }
+    
+    
     
     private func configureMapView() {
         self.view.addSubview(self.mapView)
@@ -175,6 +193,7 @@ final class HomeController: UIViewController {
     }
     
     private func configureRideActionView() {
+        self.rideActionView.delegate = self
         self.view.addSubview(self.rideActionView)
         self.rideActionView.frame = CGRect(x: 0,
                                            y: self.view.frame.height,
@@ -215,7 +234,7 @@ final class HomeController: UIViewController {
         self.configureUI()
          
         self.fetchUserData()
-        self.fetchDrivers()
+//        self.fetchDrivers()
     }
     
     private func configureActionButton(config: ActionButtonConfiguration) {
@@ -232,6 +251,42 @@ final class HomeController: UIViewController {
     
     
     
+    
+    
+    
+    
+    
+    
+    // MARK: - Helper Functions
+    private func checkIfUserIsLoggedIn() {
+        if Auth.auth().currentUser?.uid == nil {
+            print("DEBUG: User is not logged in")
+            DispatchQueue.main.async {
+                let nav = UINavigationController(rootViewController: LoginController())
+                nav.modalPresentationStyle = .fullScreen
+                self.present(nav, animated: true, completion: nil)
+            }
+        } else {
+            print("DEBUG: User is logged in")
+            self.configure()
+        }
+    }
+    // sign out
+    private func signOut() {
+        do {
+            try Auth.auth().signOut()
+            DispatchQueue.main.async {
+                let nav = UINavigationController(rootViewController: LoginController())
+                nav.modalPresentationStyle = .fullScreen
+                self.present(nav, animated: true, completion: nil)
+            }
+        } catch {
+            print("DEBUG: Error signin out")
+        }
+    }
+    
+    
+    
     private func dismissLocationView(completion: ((Bool) -> Void)? = nil) {
         UIView.animate(withDuration: 0.3, animations: {
             self.locationInputView.alpha = 0
@@ -241,7 +296,20 @@ final class HomeController: UIViewController {
     }
     
     
-    private func animateRideActionView(shouldShow: Bool, destination: MKPlacemark? = nil) {
+    // 밑에서 화면이 나옴
+        // config에 따라 모든 것이 바뀜
+        // config == 현재 passenger 및 driver의 상태를 알려주는 열거형
+    // passenger인 상태
+        // 1. 테이블뷰에서 셀을 선택했을 때
+            // destination을 통해 도착지가 RideActionView에 뜸
+        // 2. passenger와 driver가 서로 Accept를 했을 때
+            // user가 누구인지에 따라 레이블의 텍스트가 바뀜
+            // driver의 이름이 나옴
+    // driver인 상태
+        // 1. passenger와 driver가 서로 Accept를 했을 때
+            // user가 누구인지에 따라 레이블의 텍스트가 바뀜
+            // passenger의 이름이 나옴
+    private func animateRideActionView(shouldShow: Bool, destination: MKPlacemark? = nil, config: RideActionViewConfiguration? = nil, user: User? = nil) {
         
         let yOrigin = shouldShow ? self.view.frame.height - viewHeight.RideActionViewHeight : self.view.frame.height
         
@@ -250,11 +318,16 @@ final class HomeController: UIViewController {
             self.rideActionView.frame.origin.y = yOrigin
         }
         
-        
-        
         if shouldShow {
-            guard let destination = destination else { return }
-            self.rideActionView.destination = destination
+            guard let config = config else { return }
+            
+            if let destination = destination {
+                self.rideActionView.destination = destination
+            }
+            if let user = user {
+                self.rideActionView.user = user
+            }
+            self.rideActionView.configureEnumUI(withConfig: config)
         }
     }
     
@@ -262,17 +335,43 @@ final class HomeController: UIViewController {
     
     // MARK: - API
     private func fetchUserData() {
-        guard let currentUid = Auth.auth().currentUser?.uid else {return }
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
         
-        service.fetchUserData(uid: currentUid) { user in
+        self.service.fetchUserData(uid: currentUid) { user in
             self.user = user
         }
     }
+    
+    private func observeTrips() {
+        self.service.observeTrips { trip in
+            self.trip = trip
+        }
+    }
+    
+    // 사용자가 passenger인 경우
+        // passenger에게 trip의 현재 상태를 알려주는 함수
+    private func observeCurrentTrip() {
+        self.service.observeCurrentTrip { trip in
+            self.trip = trip
+            
+            if trip.state == .accepted {
+                self.shouldPresentLoadingView(false)
+                
+                guard let driverUid = trip.driverUid else { return }
+                
+                self.service.fetchUserData(uid: driverUid) { driver in
+                    self.animateRideActionView(shouldShow: true, config: .tripAccepted, user: driver)
+                }
+            }
+        }
+    }
+    
     // observe에 의해서 driver의 위치가 바뀔 때마다 fechDrivers가 호출 됨
     private func fetchDrivers() {
+        
         guard let location = self.locationManager?.location else { return }
         
-        service.fetchDrivers(location: location) { driver in
+        self.service.fetchDrivers(location: location) { driver in
             
             // coordinate == driver의 위치
             guard let coordinate = driver.location?.coordinate else { return }
@@ -308,44 +407,6 @@ final class HomeController: UIViewController {
     
     
     
-    
-    
-    
-    
-    private func checkIfUserIsLoggedIn() {
-        if Auth.auth().currentUser?.uid == nil {
-            print("DEBUG: User is not logged in")
-            DispatchQueue.main.async {
-                let nav = UINavigationController(rootViewController: LoginController())
-                nav.modalPresentationStyle = .fullScreen
-                self.present(nav, animated: true, completion: nil)
-            }
-        } else {
-            print("DEBUG: User is logged in")
-
-            configure()
-        }
-        
-    }
-    
-    
-    // sign out
-    private func signOut() {
-        do {
-            try Auth.auth().signOut()
-            DispatchQueue.main.async {
-                let nav = UINavigationController(rootViewController: LoginController())
-                nav.modalPresentationStyle = .fullScreen
-                self.present(nav, animated: true, completion: nil)
-            }
-        } catch {
-            print("DEBUG: Error signin out")
-        }
-    }
-    
-    
-    
-    
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -357,6 +418,12 @@ final class HomeController: UIViewController {
         
 //        self.signOut()
         
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        guard let trip = trip else { return }
+        print("DEBUG: Trip state is \(trip.state)")
     }
 }
 
@@ -459,6 +526,7 @@ private extension HomeController {
 
 // MARK: - LocationInputActivationViewDelegate
 extension HomeController: LocationInputActivationViewDelegate {
+    
     func presentLocationInputView() {
         // 기존의 inputActivationView를 안 보이도록 설정
         self.inputActivationView.alpha = 0
@@ -561,7 +629,7 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
             self.mapView.zoomToFit(annotations: annotations)
             
             // 뷰 생성
-            self.animateRideActionView(shouldShow: true, destination: selectedPlacemark)
+            self.animateRideActionView(shouldShow: true, destination: selectedPlacemark, config: .requestRide)
         }
     }
 }
@@ -590,5 +658,73 @@ extension HomeController: MKMapViewDelegate {
             return lineRenderer
         }
         return MKOverlayRenderer()
+    }
+}
+
+
+
+
+// MARK: - RideActionViewDelegate
+extension HomeController: RideActionViewDelegate {
+    
+    func uploadTrip() {
+        guard let pickerCoordinates = locationManager?.location?.coordinate else { return }
+        
+        // 로딩(버퍼링, 도착지를 선택하면 driver가 ok를 할 때까지 기다리는) 화면 구현
+            // extension - UIViewController
+        self.shouldPresentLoadingView(true, message: "Finding you a ride..")
+        
+        // 도착지 좌표
+        guard let destinationCoordinates = self.rideActionView.destination?.coordinate else { return }
+        
+        // 유저(passenger)의 위치와 도착지의 위치를 DB에 넣는 과정
+        service.uploadTrip(pickerCoordinates, destinationCoordinates) { error, ref in
+            if let error = error {
+                print("DEBUG: Frailed to upload trip with error \(error)")
+            }
+            // rideActionView를 숨김
+                // rideActionView: 도착지를 확인하고 driver를 부르는 버튼
+            UIView.animate(withDuration: 0.4) {
+                self.rideActionView.frame.origin.y = self.view.frame.height
+            }
+        }
+    }
+}
+
+
+
+// MARK: - PickupControllerDelegate
+extension HomeController: PickupControllerDelegate {
+    
+    func didAcceptTrip(_ trip: Trip) {
+        
+        // 주석 만들기
+        let anno = MKPointAnnotation()
+        anno.coordinate = trip.pickupCoordinates
+        self.mapView.addAnnotation(anno)
+        
+        // 주석의 크기를 키움
+        self.mapView.selectAnnotation(anno, animated: true)
+        
+        let placmark = MKPlacemark(coordinate: trip.pickupCoordinates)
+        let mapItem = MKMapItem(placemark: placmark)
+        self.generatePolyline(toDestination: mapItem)
+        
+        self.mapView.zoomToFit(annotations: self.mapView.annotations)
+        
+
+        
+        
+        // 화면 전환
+            // RideActionView가 나옴
+        self.dismiss(animated: true) {
+            
+            self.service.fetchUserData(uid: trip.passenerUid) { passenger in
+                
+                // RideActionView 보이게 하기
+                    // extension -> UIViewController
+                self.animateRideActionView(shouldShow: true, config: .tripAccepted, user: passenger)
+            }
+        }
     }
 }

@@ -233,24 +233,24 @@ extension UIView {
             
             view.addSubview(textField)
             textField.anchor(leading: img.trailingAnchor,
-                             trailing: view.trailingAnchor,
                              paddingLeading: 8,
+                             trailing: view.trailingAnchor,
                              paddingTrailing: 8,
                              centerY: view)
         }
         // Use SegmentedControl
         if let sc = segmentedControl {
             img.anchor(top: view.topAnchor,
-                       leading: view.leadingAnchor,
                        paddingTop: -8,
+                       leading: view.leadingAnchor,
                        paddingLeading: 8,
                        width: 24,
                        height: 24)
             
             view.addSubview(sc)
             sc.anchor(leading: view.leadingAnchor,
-                      trailing: view.trailingAnchor,
                       paddingLeading: 8,
+                      trailing: view.trailingAnchor,
                       paddingTrailing: 8,
                       centerY: view,
                       paddingCenterY: 5)
@@ -263,8 +263,8 @@ extension UIView {
         view.addSubview(separatorView)
         separatorView.anchor(bottom: view.bottomAnchor,
                              leading: view.leadingAnchor,
-                             trailing: view.trailingAnchor,
                              paddingLeading: 8,
+                             trailing: view.trailingAnchor,
                              height: 0.75)
         
         
@@ -274,22 +274,24 @@ extension UIView {
     
     // MARK: - Anchor
     func anchor(top: NSLayoutYAxisAnchor? = nil,
-                bottom: NSLayoutYAxisAnchor? = nil,
-                leading: NSLayoutXAxisAnchor? = nil,
-                trailing: NSLayoutXAxisAnchor? = nil,
-                
                 paddingTop: CGFloat = 0,
+                
+                bottom: NSLayoutYAxisAnchor? = nil,
                 paddingBottom: CGFloat = 0,
+                
+                leading: NSLayoutXAxisAnchor? = nil,
                 paddingLeading: CGFloat = 0,
+                
+                trailing: NSLayoutXAxisAnchor? = nil,
                 paddingTrailing: CGFloat = 0,
                 
                 width: CGFloat? = nil,
                 height: CGFloat? = nil,
                 
                 centerX: UIView? = nil,
-                centerY: UIView? = nil,
-                
                 paddingCenterX: CGFloat = 0,
+                
+                centerY: UIView? = nil,
                 paddingCenterY: CGFloat = 0) {
         
         self.translatesAutoresizingMaskIntoConstraints = false
@@ -362,6 +364,7 @@ extension MKPlacemark {
 }
 
 
+// MARK: - MapView
 extension MKMapView {
     func zoomToFit(annotations: [MKAnnotation]) {
         var zoomRect = MKMapRect.null
@@ -377,5 +380,60 @@ extension MKMapView {
         }
         let insets = UIEdgeInsets(top: 100, left: 75, bottom: 350, right: 75)
         setVisibleMapRect(zoomRect, edgePadding: insets, animated: true)
+    }
+}
+
+
+
+// MARK: - UIViewController
+extension UIViewController {
+    func shouldPresentLoadingView(_ present: Bool, message: String? = nil) {
+
+        if present {
+            let loadingView = UIView()
+            loadingView.frame = self.view.frame
+            loadingView.backgroundColor = UIColor.black
+            loadingView.alpha = 0
+            loadingView.tag = 1
+            
+            let indicator = UIActivityIndicatorView()
+            indicator.style =  UIActivityIndicatorView.Style.large
+            indicator.color = .white
+            indicator.center = self.view.center
+            
+            let label = UILabel()
+            label.text = message
+            label.textColor = UIColor.white
+            label.font = UIFont.systemFont(ofSize: 20)
+            label.textAlignment = .center
+            label.alpha = 0.87
+            
+            // loadingView만을 지울 것이기 때문에 loadingView 안에 레이아웃을 넣어야 함
+            self.view.addSubview(loadingView)
+            loadingView.addSubview(indicator)
+            loadingView.addSubview(label)
+            
+            label.anchor(top: indicator.bottomAnchor,
+                         paddingTop: 32,
+                         centerX: self.view)
+            
+            indicator.startAnimating()
+            
+            UIView.animate(withDuration: 0.3) {
+                loadingView.alpha = 0.7
+            }
+        } else {
+            self.view.subviews.forEach { subViews in
+                
+                // 지우고싶은 뷰의 태그를 달아 해다 뷰만 지우는 과정
+                if subViews.tag == 1 {
+                    UIView.animate(withDuration: 0.3) {
+                        subViews.alpha = 0
+                    } completion: { _ in
+                        subViews.removeFromSuperview()
+                    }
+                }
+            }
+        }
     }
 }

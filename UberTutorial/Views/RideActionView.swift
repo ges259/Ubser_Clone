@@ -8,10 +8,22 @@
 import UIKit
 import MapKit
 
+
+
+
 final class RideActionView: UIView {
     
     
     // MARK: - Properties
+    
+    var delegate: RideActionViewDelegate?
+    
+    // enum properties
+    var config = RideActionViewConfiguration()
+    var buttonAction = ButtonAction()
+    
+    var user: User?
+    
     
     var destination: MKPlacemark? {
         didSet {
@@ -32,8 +44,7 @@ final class RideActionView: UIView {
                                fontSize: 18)
     }()
     private let addressLabel: UILabel = {
-        return UILabel().label(labelText: "Test23411fdsafs",
-                               LabelTextColor: .lightGray,
+        return UILabel().label(LabelTextColor: .lightGray,
                                fontName: .system,
                                fontSize: 16)
     }()
@@ -103,7 +114,7 @@ final class RideActionView: UIView {
     
     // MARK: - Selector
     @objc private func actionButtonPressed() {
-        print("DEBUG: ActionButtonPressed")
+        self.delegate?.uploadTrip()
     }
     
     
@@ -144,20 +155,54 @@ final class RideActionView: UIView {
         // separatorView autoLayout
         self.addSubview(self.separatorView)
         self.separatorView.anchor(top: self.uberXLabel.bottomAnchor,
+                                  paddingTop: 4,
                                   leading: self.leadingAnchor,
                                   trailing: self.trailingAnchor,
-                                  paddingTop: 4,
                                   height: 0.75)
         
         // actionButton autoLayout
         self.addSubview(self.actionButton)
         self.actionButton.anchor(bottom: self.safeAreaLayoutGuide.bottomAnchor,
-                                 leading: self.leadingAnchor,
-                                 trailing: self.trailingAnchor,
                                  paddingBottom: 17,
+                                 leading: self.leadingAnchor,
                                  paddingLeading: 12,
+                                 trailing: self.trailingAnchor,
                                  paddingTrailing: 12,
                                  height: 50)
+    }
+    
+    
+    
+    func configureEnumUI(withConfig config: RideActionViewConfiguration) {
+        switch config {
+        case .requestRide:
+            self.buttonAction = .requestRide
+            self.actionButton.setTitle(self.buttonAction.description, for: .normal)
+            
+        case .tripAccepted:
+            guard let user = user else { return }
+            
+            // driver인 경우 -> passenger가 누군지 알려줌
+            if user.accountType == .passenger {
+                self.titleLabel.text = "En Route To Passenger2222"
+                self.buttonAction = .getDirections
+                self.actionButton.setTitle(self.buttonAction.description, for: .normal)
+                // passenger인 경우 -> driver가 누군지 알려줌
+            } else {
+                self.titleLabel.text = "Driver En Route2222"
+                self.addressLabel.text = nil
+                self.buttonAction = .cancel
+                self.actionButton.setTitle(self.buttonAction.description, for: .normal)
+            }
+            
+            
+        case .pickupPassenger:
+            break
+        case .tripInprogress:
+            break
+        case .endTrip:
+            break
+        }
     }
     
     
@@ -181,3 +226,8 @@ final class RideActionView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
+
+
+
+
