@@ -188,7 +188,7 @@ private func updateUserDataAndShowHomeController(uid: String, values: [String: A
         guard let controller = UIApplication.shared.keyWindow?.rootViewController as? HomeController else { return }
         
         // mapkit 활성화
-        controller.configureMapView()
+        controller.configure()
         
         // HomeController로 이동
         self.dismiss(animated: true)

@@ -129,16 +129,12 @@ final class LoginController: UIViewController {
             guard let controller = UIApplication.shared.keyWindow?.rootViewController as? HomeController else { return }
             
             // mapkit 활성화
-            controller.configureMapView()
+            controller.configure()
             
             // HomeController로 이동
             self.dismiss(animated: true)
             print("Successfully logged user in")
-            
         }
-        
-        
-        
     }
     
     

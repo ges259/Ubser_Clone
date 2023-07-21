@@ -11,8 +11,22 @@ import CoreFoundation
 
 struct TableViewIdentifier {
     static let LocationTableViewIdentifier: String = "LocationTableView"
-    static let LocationTableViewHeight: CGFloat = 200
+    init() {}
+}
+
+struct viewHeight {
+    static let LocationTableHeight: CGFloat = 200
+    static let RideActionViewHeight: CGFloat = 300
     
+    init() {}
+}
+
+
+
+
+struct AnnotationIdentifier {
+    
+    static let annotationIdentifer: String = "DriverAnnotation"
     
     init() {}
 }

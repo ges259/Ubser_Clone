@@ -13,6 +13,7 @@ protocol LocationInputActivationViewDelegate: AnyObject {
 
 protocol LocationInputViewDelegate: AnyObject {
     func dismissLocationInputView()
+    func executeSearch(query: String)
 }
 
 

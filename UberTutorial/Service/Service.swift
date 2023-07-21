@@ -6,8 +6,8 @@
 //
 
 import FirebaseCore
-import FirebaseAuth
-import FirebaseDatabase
+//import FirebaseAuth
+//import FirebaseDatabase
 import GeoFire
 import CoreLocation
 
@@ -23,25 +23,47 @@ struct Service {
     
     
     // MARK: - API
-    func fetchUserData(completion: @escaping (User) -> Void) {
-        
-        guard let currentUid = Auth.auth().currentUser?.uid else { return }
-        
-        REF_USERS.child(currentUid).observeSingleEvent(of: .value) { snapshot in
+    func fetchUserData(uid: String,completion: @escaping (User) -> Void) {
+        REF_USERS.child(uid).observeSingleEvent(of: .value) { snapshot in
             
             guard let dictionary = snapshot.value as? [String: Any] else { return }
-            let user = User(dictionary: dictionary)
-            print("DEBUG: User email is \(user.email)")
-            print("DEBUG: fullName email is \(user.fullName)")
+            let uid = snapshot.key
             
+            let user = User(uid: uid,dictionary: dictionary)
+            
+            // completion
             completion(user)
         }
     }
     
-    
     func fetchDrivers(location: CLLocation, completion: @escaping(User) -> Void) {
-        let geofile = GeoFire(firebaseRef: REF_DRIVER_LOCATIONS)
         
-        
+        let geofire = GeoFire(firebaseRef: REF_DRIVER_LOCATIONS)
+
+        REF_DRIVER_LOCATIONS.observe(.value) { snapshot in
+            
+            geofire.query(at: location, withRadius: 50).observe(.keyEntered, with: { uid, location in
+                
+                self.fetchUserData(uid: uid) { user in
+                    var driver = user
+                    driver.location = location
+                    completion(driver)
+                }
+            })
+        }
     }
+    
+    
+    
+}
+
+
+/*
+ observe(_ eventType: GFEventType, with block: @escaping GFQueryResultBlock) -> UInt
+ */
+
+
+
+struct passengerService {
+
 }

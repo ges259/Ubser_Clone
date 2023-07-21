@@ -59,20 +59,26 @@ final class LocationInputView: UIView {
     
     
     // MARK: - TextField
-    private let startingLocationTextField: UITextField = {
+    private lazy var startingLocationTextField: UITextField = {
         return UITextField().textField(withPlaceholder: "Current Location",
                                        backgroundColor: .systemGray6,
                                        textColor: .black,
                                        fontSize: 14,
+                                       keyboardType: .webSearch,
                                        paddingLeftView: true)
     }()
     
-    private let destinationLocationTextField: UITextField = {
-        return UITextField().textField(withPlaceholder: "Enter a destination..",
-                                       backgroundColor: .systemGray4,
-                                       textColor: .black,
-                                       fontSize: 14,
-                                       paddingLeftView: true)
+    private lazy var destinationLocationTextField: UITextField = {
+        let tf = UITextField().textField(withPlaceholder: "Enter a destination..",
+                                         backgroundColor: .systemGray4,
+                                         textColor: .black,
+                                         fontSize: 14,
+                                         keyboardType: .webSearch,
+                                         paddingLeftView: true)
+        
+        tf.delegate = self
+        
+        return tf
     }()
     
     
@@ -102,8 +108,8 @@ final class LocationInputView: UIView {
                                leading: self.leadingAnchor,
                                paddingTop: 0,
                                paddingLeading: 12,
-                               width: 24,
-                               height: 25)
+                               width: 30,
+                               height: 30)
         
         self.addSubview(self.titleLabel)
         self.titleLabel.anchor(centerX: self, centerY: self.backButton)
@@ -158,4 +164,23 @@ final class LocationInputView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+
+
+
+
+// MARK: - UITextFieldDelegate
+extension LocationInputView: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        guard let query = textField.text else { return false }
+        
+        self.delegate?.executeSearch(query: query)
+        
+        return true
+    }
+    
+    
+    
 }

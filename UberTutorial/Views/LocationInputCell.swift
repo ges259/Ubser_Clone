@@ -6,22 +6,35 @@
 //
 
 import UIKit
+import MapKit
 
 final class LocationInputCell: UITableViewCell {
     
     
     
     // MARK: - Properties
+    var placemark: MKPlacemark? {
+        didSet {
+            self.titleLabel.text = placemark?.name
+            self.addressLabel.text = placemark?.address
+        }
+    }
     
+    
+    
+    
+    
+    
+    
+    
+    // MARK: - Layout
     private var titleLabel: UILabel = {
-        return UILabel().label(labelText: "123",
-                               LabelTextColor: .darkGray,
+        return UILabel().label(LabelTextColor: .darkGray,
                                fontName: .system,
                                fontSize: 14)
     }()
     private var addressLabel: UILabel = {
-        return UILabel().label(labelText: "123132123123213131232",
-                               LabelTextColor: .darkGray,
+        return UILabel().label(LabelTextColor: .darkGray,
                                fontName: .system,
                                fontSize: 14)
     }()
