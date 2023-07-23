@@ -19,7 +19,6 @@ protocol LocationInputViewDelegate: AnyObject {
 protocol RideActionViewDelegate: AnyObject {
 //    func uploadTrip(_ view: RideActionView)
     func uploadTrip()
-    func cancelTrip()
 }
 
 protocol PickupControllerDelegate: AnyObject {

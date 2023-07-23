@@ -123,13 +123,6 @@ final class HomeController: UIViewController {
     
     
     // MARK: - Configure UI
-    func configure() {
-        self.configureUI()
-         
-        self.fetchUserData()
-
-    }
-    
     private func configureUI() {
         // 맵뷰 생성
         self.configureMapView()
@@ -161,15 +154,18 @@ final class HomeController: UIViewController {
     }
     
     
+    
     private func configureMapView() {
-        self.mapView.delegate = self
         self.view.addSubview(self.mapView)
         self.mapView.frame = self.view.frame
         // 현재 자신의 위치
         self.mapView.showsUserLocation = true
         // 위치를 직접 설정 가능
             // Features -> Location -> Custom Location
-        self.mapView.userTrackingMode = .followWithHeading
+        self.mapView.userTrackingMode = .follow
+        self.mapView.showsUserLocation = true
+        
+        self.mapView.delegate = self
         
     }
     
@@ -177,16 +173,18 @@ final class HomeController: UIViewController {
     private func configureLocationInputView() {
         // delegate 설정
         self.locationInputView.delegate = self
+        self.locationInputView.alpha = 0
         self.view.addSubview(self.locationInputView)
         self.locationInputView.anchor(top: self.view.topAnchor,
                                       leading: self.view.leadingAnchor,
                                       trailing: self.view.trailingAnchor,
                                       height: viewHeight.LocationTableHeight)
-        self.locationInputView.alpha = 0
+        
         
         UIView.animate(withDuration: 0.3) {
             self.locationInputView.alpha = 1
         } completion: { _ in
+            
             // 테이블뷰 보이게
             UIView.animate(withDuration: 0.3) {
                 self.tableView.frame.origin.y = viewHeight.LocationTableHeight
@@ -202,6 +200,10 @@ final class HomeController: UIViewController {
                                            width: self.view.frame.width,
                                            height: viewHeight.RideActionViewHeight)
     }
+    
+    
+    
+    
     
     
     // table view setting
@@ -225,7 +227,16 @@ final class HomeController: UIViewController {
         self.view.addSubview(self.tableView)
 
     }
-    // 왼쪽 상단 버튼 구성
+    
+    
+    
+    func configure() {
+        self.configureUI()
+         
+        self.fetchUserData()
+//        self.fetchDrivers()
+    }
+    
     private func configureActionButton(config: ActionButtonConfiguration) {
         switch config {
         case .ShowMenu:
@@ -299,9 +310,7 @@ final class HomeController: UIViewController {
             // user가 누구인지에 따라 레이블의 텍스트가 바뀜
             // passenger의 이름이 나옴
     private func animateRideActionView(shouldShow: Bool, destination: MKPlacemark? = nil, config: RideActionViewConfiguration? = nil, user: User? = nil) {
-        // shouldShow
-            // true -> 화면에 보이게
-            // false -> 숨기기
+        
         let yOrigin = shouldShow ? self.view.frame.height - viewHeight.RideActionViewHeight : self.view.frame.height
         
         UIView.animate(withDuration: 0.3) {
@@ -309,10 +318,6 @@ final class HomeController: UIViewController {
             self.rideActionView.frame.origin.y = yOrigin
         }
         
-        //
-//        self.rideActionView.removeFromSuperview()
-        
-        // shouldShow가 true 이면
         if shouldShow {
             guard let config = config else { return }
             
@@ -322,7 +327,7 @@ final class HomeController: UIViewController {
             if let user = user {
                 self.rideActionView.user = user
             }
-            self.rideActionView.config = config
+            self.rideActionView.configureEnumUI(withConfig: config)
         }
     }
     
@@ -418,31 +423,15 @@ final class HomeController: UIViewController {
         super.viewWillAppear(animated)
         
         guard let trip = trip else { return }
+        print("DEBUG: Trip state is \(trip.state)")
     }
 }
 
 
 
-// MARK: - CLLocationManagerDelegate
+// MARK: - Location services
 extension HomeController: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
-
-
-        print("DEBUG: Did start monitoring for region \(region)")
-    }
-
-    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-
-
-        self.rideActionView.config = .pickupPassenger
-    }
-    
-    
-    
-    
     private func enableLoactionServices(){
-        // delegate 설정
-        self.locationManager?.delegate = self
         
         guard let locationManager = self.locationManager else { return }
         
@@ -494,8 +483,8 @@ private extension HomeController {
             completion(results)
         }
     }
-    // polyline 만들기
-    private func generatePolyline(toDestination destination: MKMapItem) {
+    
+    func generatePolyline(toDestination destination: MKMapItem) {
         
         // 요청서를 만듦
         let request = MKDirections.Request()
@@ -520,7 +509,6 @@ private extension HomeController {
         }
     }
     
-    // 주석 및 polyline삭제
     func removeAnnotationsAndOverlays() {
         // 주석 삭제
         self.mapView.annotations.forEach { annotation in
@@ -532,28 +520,6 @@ private extension HomeController {
         if mapView.overlays.count > 0 {
             self.mapView.removeOverlay(self.mapView.overlays[0])
         }
-    }
-    
-    // 화면 축소 시 보여질 맵의 크기
-    private func centerMapOnUserLocation() {
-        guard let coordinate = self.locationManager?.location?.coordinate else { return }
-        
-        let region = MKCoordinateRegion(center: coordinate,
-                                        latitudinalMeters: 2000,
-                                        longitudinalMeters: 2000)
-        self.mapView.setRegion(region, animated: true)
-    }
-    
-    
-    
-    // 미정 - 다시 생각해보기
-    // 사용자각 passenger일때
-    // passenger의 주변에 범위 생성
-        // driver가 passenger의 범위 안에 있을 때 알려주는 함수
-    func setCustomRegion(withCoordinates coordinates: CLLocationCoordinate2D) {
-        
-        let region = CLCircularRegion(center: coordinates, radius: 25, identifier: "pickup")
-        self.locationManager?.startMonitoring(for: region)
     }
 }
 
@@ -669,16 +635,8 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
 }
 
 
-// MARK: - MapViewDelegate
+// MARK: - MKMapViewDelegate
 extension HomeController: MKMapViewDelegate {
-    // driver의 위치 자동 업데이트
-    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-        guard let user = self.user else { return }
-        // driver만 업데이트
-        guard user.accountType == .driver else { return }
-        guard let userLocation = userLocation.location else { return }
-        self.service.updateDriverLocation(location: userLocation)
-    }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if let annotation = annotation as? DriverAnnotation {
@@ -707,8 +665,6 @@ extension HomeController: MKMapViewDelegate {
 
 
 // MARK: - RideActionViewDelegate
-
-// 사용자가 passenger인 경우
 extension HomeController: RideActionViewDelegate {
     
     func uploadTrip() {
@@ -733,55 +689,19 @@ extension HomeController: RideActionViewDelegate {
             }
         }
     }
-    
-    
-    // passenger와 driver가 서로 ok를 하고난 후
-        // passenger가 cancelTrip버튼을 누른 상황 <<<<<----- 현재 상황
-            // 이후 일어날 일 : DB에서 서로 ok한 데이터가 사라짐
-            // + passenger의 화면이 dismiss
-    func cancelTrip() {
-        service.cancelTrip { error, ref in
-            if let error = error {
-                print("DEBUG: Error deleting trip \(error.localizedDescription)")
-                return
-            }
-            // 화면 축소
-            self.centerMapOnUserLocation()
-            // RideActionView 내리기
-            self.animateRideActionView(shouldShow: false)
-            // 주석 및 polyline삭제
-            self.removeAnnotationsAndOverlays()
-            
-            
-            // 버튼 바꾸기 ( backButton -> ShoMenu )
-            self.actionButton.setImage(#imageLiteral(resourceName: "baseline_menu_black_36dp").withRenderingMode(.alwaysOriginal), for: .normal)
-            self.actionButtonConfig = .ShowMenu
-            
-            self.inputActivationView.alpha = 1
-        }
-    }
 }
 
 
 
 // MARK: - PickupControllerDelegate
-
-// 사용자가 driver인 경우
 extension HomeController: PickupControllerDelegate {
     
     func didAcceptTrip(_ trip: Trip) {
-        self.trip = trip
-        
         
         // 주석 만들기
         let anno = MKPointAnnotation()
         anno.coordinate = trip.pickupCoordinates
         self.mapView.addAnnotation(anno)
-        
-        // 위치
-        print("DEBUG: setCustomRegion \(#function)")
-        self.setCustomRegion(withCoordinates: trip.pickupCoordinates)
-        
         
         // 주석의 크기를 키움
         self.mapView.selectAnnotation(anno, animated: true)
@@ -792,25 +712,15 @@ extension HomeController: PickupControllerDelegate {
         
         self.mapView.zoomToFit(annotations: self.mapView.annotations)
         
-        // Observe
-        // passenger가 cancel을 누르면 RideActionView를 내림 (2번)
-        self.service.observeTripCancel(trip: trip) {
-            // 1. 주석 및 polyline 삭제
-            self.removeAnnotationsAndOverlays()
-            // 2. RideActionView 화면에 안 보이게 내리기
-            self.animateRideActionView(shouldShow: false)
-            // 맵뷰를 축소
-            self.centerMapOnUserLocation()
-            // cancel됐다고 driver의 화면에 alert창 띄우기
-            self.presentAlertController(withTitle: "Oops!",
-                                        message: "The passenger has decided to cancel this ride. Press Ok to continue")
-        }
+
         
-        // ObserveSingleEvent
+        
         // 화면 전환
             // RideActionView가 나옴
         self.dismiss(animated: true) {
+            
             self.service.fetchUserData(uid: trip.passenerUid) { passenger in
+                
                 // RideActionView 보이게 하기
                     // extension -> UIViewController
                 self.animateRideActionView(shouldShow: true, config: .tripAccepted, user: passenger)

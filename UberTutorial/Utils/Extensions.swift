@@ -338,16 +338,10 @@ extension UIView {
     
     
     
-    func backgrouncColorView(backgroundColor color: UIColor,
-                             cornerRadius corner: CGFloat? = nil) -> UIView {
+    func backgrouncColorView(backgroundColor color: UIColor) -> UIView {
         let view = UIView()
         
         view.backgroundColor = color
-        
-        if let corner = corner {
-            view.clipsToBounds = true
-            view.layer.cornerRadius = corner
-        }
         
         return view
     }
@@ -393,14 +387,6 @@ extension MKMapView {
 
 // MARK: - UIViewController
 extension UIViewController {
-    func presentAlertController(withTitle title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let alertAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
-        alert.addAction(alertAction)
-        self.present(alert, animated: true, completion: nil)
-    }
-    
-    
     func shouldPresentLoadingView(_ present: Bool, message: String? = nil) {
 
         if present {
