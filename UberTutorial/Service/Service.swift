@@ -36,6 +36,7 @@ struct Service {
         }
     }
     
+    // 사용자가 passenger인 경우
     func fetchDrivers(location: CLLocation, completion: @escaping(User) -> Void) {
         
         let geofire = GeoFire(firebaseRef: REF_DRIVER_LOCATIONS)
@@ -44,7 +45,7 @@ struct Service {
             
             geofire.query(at: location, withRadius: 50).observe(.keyEntered, with: { uid, location in
                 
-                self.fetchUserData(uid: uid) { user in
+                Service.shared.fetchUserData(uid: uid) { user in
                     var driver = user
                     driver.location = location
                     completion(driver)
@@ -115,7 +116,7 @@ struct Service {
     
     
     
-    
+// Cancel
     // 사용자가 passenger인 경우
         // passenger에게 trip의 현재 상태를 알려주는 함수
             // loadingView를 끊어준다.
@@ -129,5 +130,30 @@ struct Service {
             let trip = Trip(passenerUid: uid, dictionary: dictionary)
             completion(trip)
         }
+    }
+    
+    
+    // 사용자가 passenger인 경우
+    func cancelTrip(completion: @escaping (Error?, DatabaseReference) -> Void) {
+        
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        
+        REF_TRIPS.child(uid).removeValue(completionBlock: completion)
+    }
+    
+    // 사용자가 driver인 경우
+        // passenger가 cancel버튼을 누르면 -> DB에서 trip데이터가 사라짐. -> passenger의 화면 dismiss
+            // observeTripCancel() : passenger가 cancel을 누르면 -> driver의 화면 dismiss
+    func observeTripCancel(trip: Trip, completion: @escaping () -> Void) {
+        REF_TRIPS.child(trip.passenerUid).observeSingleEvent(of: .childRemoved) { _ in
+            completion()
+        }
+    }
+    
+    // 위치 업데이트
+    func updateDriverLocation(location: CLLocation) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let geofire = GeoFire(firebaseRef: REF_DRIVER_LOCATIONS)
+        geofire.setLocation(location, forKey: uid)
     }
 }

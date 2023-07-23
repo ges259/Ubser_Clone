@@ -19,8 +19,13 @@ final class RideActionView: UIView {
     var delegate: RideActionViewDelegate?
     
     // enum properties
-    var config = RideActionViewConfiguration()
     var buttonAction = ButtonAction()
+    
+    var config: RideActionViewConfiguration? {
+        didSet {
+            self.configureEnumUI(withConfig: self.config!)
+        }
+    }
     
     var user: User?
     
@@ -48,26 +53,21 @@ final class RideActionView: UIView {
                                fontName: .system,
                                fontSize: 16)
     }()
-    private let xLabel: UILabel = {
+    private let infoViewLabel: UILabel = {
         return UILabel().label(labelText: "X",
                                LabelTextColor: .white,
                                fontName: .system,
                                fontSize: 30)
     }()
-    private let uberXLabel: UILabel = {
+    private let uberInfoLabel: UILabel = {
         return UILabel().label(labelText: "Uber X",
                                LabelTextColor: .black,
                                fontName: .system,
                                fontSize: 18)
     }()
     private let infoView: UIView = {
-        let view = UIView()
-        
-        view.backgroundColor = .black
-        view.clipsToBounds = true
-        view.layer.cornerRadius = 60 / 2
-        
-        return view
+        return UIView().backgrouncColorView(backgroundColor: .black,
+                                            cornerRadius: 60 / 2)
     }()
     
     
@@ -114,7 +114,18 @@ final class RideActionView: UIView {
     
     // MARK: - Selector
     @objc private func actionButtonPressed() {
-        self.delegate?.uploadTrip()
+        switch buttonAction {
+        case .requestRide:
+            self.delegate?.uploadTrip()
+        case .cancel:
+            self.delegate?.cancelTrip()
+        case .getDirections:
+            print("DEBUG: Handle directions..")
+        case .pickup:
+            print("DEBUG: Handle pickup..")
+        case .dropOff:
+            print("DEBUG: Handle dropOff..")
+        }
     }
     
     
@@ -126,62 +137,16 @@ final class RideActionView: UIView {
     
     
     // MARK: - Helper Function
-    private func configureUI() {
-        // stackView autoLayout
-        self.addSubview(self.stackView)
-        self.stackView.anchor(top: self.topAnchor,
-                              paddingTop: 12,
-                              centerX: self)
-        
-        // infoView autoLayout
-        self.addSubview(self.infoView)
-        self.infoView.anchor(top: self.stackView.bottomAnchor,
-                             paddingTop: 16,
-                             width: 60,
-                             height: 60,
-                             centerX: self)
-        
-        // xLabel autoLayout
-        self.infoView.addSubview(self.xLabel)
-        self.xLabel.anchor(centerX: self.infoView,
-                           centerY: self.infoView)
-        
-        // uberXLabel autoLayout
-        self.addSubview(self.uberXLabel)
-        self.uberXLabel.anchor(top: self.infoView.bottomAnchor,
-                               paddingTop: 8,
-                               centerX: self)
-        
-        // separatorView autoLayout
-        self.addSubview(self.separatorView)
-        self.separatorView.anchor(top: self.uberXLabel.bottomAnchor,
-                                  paddingTop: 4,
-                                  leading: self.leadingAnchor,
-                                  trailing: self.trailingAnchor,
-                                  height: 0.75)
-        
-        // actionButton autoLayout
-        self.addSubview(self.actionButton)
-        self.actionButton.anchor(bottom: self.safeAreaLayoutGuide.bottomAnchor,
-                                 paddingBottom: 17,
-                                 leading: self.leadingAnchor,
-                                 paddingLeading: 12,
-                                 trailing: self.trailingAnchor,
-                                 paddingTrailing: 12,
-                                 height: 50)
-    }
-    
-    
-    
     func configureEnumUI(withConfig config: RideActionViewConfiguration) {
+        guard let user = user else { return }
+        
         switch config {
         case .requestRide:
             self.buttonAction = .requestRide
             self.actionButton.setTitle(self.buttonAction.description, for: .normal)
             
-        case .tripAccepted:
-            guard let user = user else { return }
             
+        case .tripAccepted:
             // driver인 경우 -> passenger가 누군지 알려줌
             if user.accountType == .passenger {
                 self.titleLabel.text = "En Route To Passenger2222"
@@ -197,12 +162,38 @@ final class RideActionView: UIView {
             
             
         case .pickupPassenger:
-            break
+            self.titleLabel.text = "Arrived At pasenger Location"
+            self.buttonAction = .pickup
+            self.actionButton.setTitle(self.buttonAction.description, for: .normal)
+            
+            
         case .tripInprogress:
-            break
+            // ~ 인 경우
+            if user.accountType == .driver {
+                self.actionButton.setTitle("TRIP IN PROGRESS", for: .normal)
+                self.actionButton.isEnabled = false
+                
+                // ~ 인 경우
+            } else {
+                self.buttonAction = .getDirections
+                self.actionButton.setTitle(buttonAction.description, for: .normal)
+            }
+            self.titleLabel.text = "En Route To Destination"
+            
+            
         case .endTrip:
-            break
+            if user .accountType == .driver {
+                self.actionButton.setTitle("ARRIVED AT DESTINATION", for: .normal)
+                self.actionButton.isEnabled = false
+            } else {
+                self.buttonAction = .dropOff
+                self.actionButton.setTitle(buttonAction.description, for: .normal)
+            }
         }
+        
+        
+        self.infoViewLabel.text = String(user.fullName.first ?? "X")
+        self.uberInfoLabel.text = user.fullName
     }
     
     
@@ -224,6 +215,51 @@ final class RideActionView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    // MARK: - Configure UI
+    private func configureUI() {
+        // stackView autoLayout
+        self.addSubview(self.stackView)
+        self.stackView.anchor(top: self.topAnchor,
+                              paddingTop: 12,
+                              centerX: self)
+        
+        // infoView autoLayout
+        self.addSubview(self.infoView)
+        self.infoView.anchor(top: self.stackView.bottomAnchor,
+                             paddingTop: 16,
+                             width: 60,
+                             height: 60,
+                             centerX: self)
+        
+        // xLabel autoLayout
+        self.infoView.addSubview(self.infoViewLabel)
+        self.infoViewLabel.anchor(centerX: self.infoView,
+                           centerY: self.infoView)
+        
+        // uberXLabel autoLayout
+        self.addSubview(self.uberInfoLabel)
+        self.uberInfoLabel.anchor(top: self.infoView.bottomAnchor,
+                               paddingTop: 8,
+                               centerX: self)
+        
+        // separatorView autoLayout
+        self.addSubview(self.separatorView)
+        self.separatorView.anchor(top: self.uberInfoLabel.bottomAnchor,
+                                  paddingTop: 4,
+                                  leading: self.leadingAnchor,
+                                  trailing: self.trailingAnchor,
+                                  height: 0.75)
+        
+        // actionButton autoLayout
+        self.addSubview(self.actionButton)
+        self.actionButton.anchor(bottom: self.safeAreaLayoutGuide.bottomAnchor,
+                                 paddingBottom: 17,
+                                 leading: self.leadingAnchor,
+                                 paddingLeading: 12,
+                                 trailing: self.trailingAnchor,
+                                 paddingTrailing: 12,
+                                 height: 50)
     }
 }
 

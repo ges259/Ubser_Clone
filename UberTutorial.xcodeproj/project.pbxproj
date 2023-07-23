@@ -160,12 +160,12 @@
 			isa = PBXGroup;
 			children = (
 				5F4414662A6573CE00BAF781 /* Extensions.swift */,
-				5F44146A2A65A59700BAF781 /* AuthButton.swift */,
+				5F9A9D312A6B15C600A304F2 /* Enum.swift */,
 				5F56A0DD2A67A78B00CD1825 /* Protocol.swift */,
 				5F56A0E72A67D58D00CD1825 /* String_Constants.swift */,
 				5F56A0EB2A6817BA00CD1825 /* DB_Constants.swift */,
 				5F56A0EF2A6841C400CD1825 /* LocationHandler.swift */,
-				5F9A9D312A6B15C600A304F2 /* Enum.swift */,
+				5F44146A2A65A59700BAF781 /* AuthButton.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
