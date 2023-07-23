@@ -10,14 +10,12 @@ import MapKit
 
 final class PickupController: UIViewController {
     
-    
     // MARK: - Properties
     private let mapView = MKMapView()
     // init <--- LifeCycle
     let trip: Trip
     
     weak var delegate: PickupControllerDelegate?
-    
     
     
     
@@ -54,8 +52,6 @@ final class PickupController: UIViewController {
     
     
     
-    
-    
     // MARK: - Selectors
     @objc private func handleDismissal() {
         self.dismiss(animated: true, completion: nil)
@@ -63,20 +59,10 @@ final class PickupController: UIViewController {
     
     
     @objc private func handleAcceptTrip() {
-        Service.shared.acceptTrip(trip: self.trip) { error, ref in
+        DriverService.shared.acceptTrip(trip: self.trip) { error, ref in
             self.delegate?.didAcceptTrip(self.trip)
         }
     }
-    
-    
-    // MARK: - API
-    
-    
-    
-    
-    
-    
-    
     
     
     
@@ -86,21 +72,9 @@ final class PickupController: UIViewController {
         let region = MKCoordinateRegion(center: self.trip.pickupCoordinates, latitudinalMeters: 1000, longitudinalMeters: 1000)
         self.mapView.setRegion(region, animated: true)
         
-        // 주석 달기
-//        let placemark = MKPlacemark(coordinate: trip.pickupCoordinates)
-        let anno = MKPointAnnotation()
-        anno.coordinate = self.trip.pickupCoordinates
-        mapView.addAnnotation(anno)
-        
-        // 주석의 크기를 키우고 애니메이션을 추가
-        self.mapView.selectAnnotation(anno, animated: true)
-        
+        // 주석 달기 + 주석 크기 키우기
+        self.mapView.addAnnotationAndSelect(forPlacemark: self.trip.pickupCoordinates)
     }
-    
-    
-    
-    
-    
     
     
     
@@ -113,10 +87,6 @@ final class PickupController: UIViewController {
         
         // configure MapView
         self.configureMapView()
-        
-        
-        
-        
     }
     init(trip: Trip) {
         self.trip = trip

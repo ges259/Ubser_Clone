@@ -11,6 +11,7 @@ import CoreFoundation
 
 struct TableViewIdentifier {
     static let LocationTableViewIdentifier: String = "LocationTableView"
+    
     init() {}
 }
 
@@ -22,7 +23,6 @@ struct viewHeight {
 }
 
 struct AnnotationIdentifier {
-    
     static let annotationIdentifer: String = "DriverAnnotation"
     
     init() {}
@@ -38,8 +38,6 @@ struct DB_String {
     static let destinationCoordinates: String = "destinationCoordinates"
     static let driverUid: String = "driverUid"
     static let state: String = "state"
-    
-    
     
     init() {}
 }

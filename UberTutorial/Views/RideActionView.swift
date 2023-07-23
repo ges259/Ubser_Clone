@@ -15,15 +15,18 @@ final class RideActionView: UIView {
     
     
     // MARK: - Properties
-    
+    // delegate
     var delegate: RideActionViewDelegate?
     
     // enum properties
-    var config = RideActionViewConfiguration()
     var buttonAction = ButtonAction()
+    var config = RideActionViewConfiguration() {
+        didSet {
+            self.configureEnumUI(withConfig: self.config)
+        }
+    }
     
     var user: User?
-    
     
     var destination: MKPlacemark? {
         didSet {
@@ -31,9 +34,6 @@ final class RideActionView: UIView {
             self.addressLabel.text = destination?.address
         }
     }
-    
-    
-    
     
     
     
@@ -48,26 +48,17 @@ final class RideActionView: UIView {
                                fontName: .system,
                                fontSize: 16)
     }()
-    private let xLabel: UILabel = {
+    private let infoViewLabel: UILabel = {
         return UILabel().label(labelText: "X",
                                LabelTextColor: .white,
                                fontName: .system,
                                fontSize: 30)
     }()
-    private let uberXLabel: UILabel = {
+    private let uberInfoLabel: UILabel = {
         return UILabel().label(labelText: "Uber X",
                                LabelTextColor: .black,
                                fontName: .system,
                                fontSize: 18)
-    }()
-    private let infoView: UIView = {
-        let view = UIView()
-        
-        view.backgroundColor = .black
-        view.clipsToBounds = true
-        view.layer.cornerRadius = 60 / 2
-        
-        return view
     }()
     
     
@@ -78,21 +69,26 @@ final class RideActionView: UIView {
                                                           self.addressLabel],
                                        axis: .vertical,
                                        distribution: .fillEqually,
-                                       spacing: 4,
-                                       alignment: .center)
+                                       alignment: .center,
+                                       spacing: 4)
     }()
     
     
 
-    
-    
     // MARK: - View
     private let separatorView: UIView = {
         return UIView().backgrouncColorView(backgroundColor: .lightGray)
     }()
     
-    
-    
+    private let infoView: UIView = {
+        let view = UIView()
+        
+        view.backgroundColor = .black
+        view.clipsToBounds = true
+        view.layer.cornerRadius = 60 / 2
+        
+        return view
+    }()
     
     
     
@@ -114,18 +110,31 @@ final class RideActionView: UIView {
     
     // MARK: - Selector
     @objc private func actionButtonPressed() {
-        self.delegate?.uploadTrip()
+        switch self.buttonAction {
+        case .requestRide:
+            self.delegate?.uploadTrip()
+            
+            
+        case .cancel:
+            self.delegate?.cancelTrip()
+            
+            
+        case .getDirections:
+            print("DEBUG: Handle get directions..")
+            
+            
+        case .pickup:
+            self.delegate?.pickupPassenger()
+            
+            
+        case .dropOff:
+            self.delegate?.dropOffPassenger()
+        }
     }
     
     
     
-    
-    
-    
-    
-    
-    
-    // MARK: - Helper Function
+    // MARK: - Configure UI
     private func configureUI() {
         // stackView autoLayout
         self.addSubview(self.stackView)
@@ -142,19 +151,19 @@ final class RideActionView: UIView {
                              centerX: self)
         
         // xLabel autoLayout
-        self.infoView.addSubview(self.xLabel)
-        self.xLabel.anchor(centerX: self.infoView,
+        self.infoView.addSubview(self.infoViewLabel)
+        self.infoViewLabel.anchor(centerX: self.infoView,
                            centerY: self.infoView)
         
         // uberXLabel autoLayout
-        self.addSubview(self.uberXLabel)
-        self.uberXLabel.anchor(top: self.infoView.bottomAnchor,
+        self.addSubview(self.uberInfoLabel)
+        self.uberInfoLabel.anchor(top: self.infoView.bottomAnchor,
                                paddingTop: 8,
                                centerX: self)
         
         // separatorView autoLayout
         self.addSubview(self.separatorView)
-        self.separatorView.anchor(top: self.uberXLabel.bottomAnchor,
+        self.separatorView.anchor(top: self.uberInfoLabel.bottomAnchor,
                                   paddingTop: 4,
                                   leading: self.leadingAnchor,
                                   trailing: self.trailingAnchor,
@@ -172,41 +181,72 @@ final class RideActionView: UIView {
     }
     
     
-    
-    func configureEnumUI(withConfig config: RideActionViewConfiguration) {
+    // MARK: - Helper Function
+    private func configureEnumUI(withConfig config: RideActionViewConfiguration) {
+        guard let user = user else { return }
+        
         switch config {
         case .requestRide:
             self.buttonAction = .requestRide
             self.actionButton.setTitle(self.buttonAction.description, for: .normal)
             
+            
         case .tripAccepted:
-            guard let user = user else { return }
             
             // driver인 경우 -> passenger가 누군지 알려줌
             if user.accountType == .passenger {
-                self.titleLabel.text = "En Route To Passenger2222"
+                self.titleLabel.text = "En Route To Passenger"
                 self.buttonAction = .getDirections
                 self.actionButton.setTitle(self.buttonAction.description, for: .normal)
                 // passenger인 경우 -> driver가 누군지 알려줌
             } else {
-                self.titleLabel.text = "Driver En Route2222"
+                self.titleLabel.text = "Driver En Route"
                 self.addressLabel.text = nil
                 self.buttonAction = .cancel
                 self.actionButton.setTitle(self.buttonAction.description, for: .normal)
             }
+            // 유저의 닉네임에 따라 레이블 다르게 표시
+            self.infoViewLabel.text = String(user.fullName.first ?? "X")
+            self.uberInfoLabel.text = user.fullName
+            
+            
+        case .driverArrived:
+            if user.accountType == .driver {
+                self.titleLabel.text = "Driver Has Arrived"
+                self.addressLabel.text = "Please meet driver at pickup location"
+            }
             
             
         case .pickupPassenger:
-            break
+            self.titleLabel.text = "Arrived At Passenger Location"
+            self.buttonAction = .pickup
+            self.actionButton.setTitle(buttonAction.description, for: .normal)
+            
+            
         case .tripInprogress:
-            break
+            if user.accountType == .driver {
+                self.actionButton.setTitle("TRIP IN PROGRESS", for: .normal)
+                self.actionButton.isEnabled = false
+            } else {
+                self.buttonAction = .getDirections
+                self.actionButton.setTitle(buttonAction.description, for: .normal)
+            }
+            self.titleLabel.text = "En Route To Description"
+            
+            self.addressLabel.text = ""
+            
+            
         case .endTrip:
-            break
+            if user.accountType == .driver {
+                self.actionButton.setTitle("ARRIVED AT DESTINATION", for: .normal)
+                self.actionButton.isEnabled = false
+            } else {
+                self.buttonAction = .dropOff
+                self.actionButton.setTitle(buttonAction.description, for: .normal)
+            }
+            self.titleLabel.text = "Arrived at Destination"
         }
     }
-    
-    
-    
     
     
     
@@ -221,7 +261,6 @@ final class RideActionView: UIView {
         // configure UI
         self.configureUI()
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

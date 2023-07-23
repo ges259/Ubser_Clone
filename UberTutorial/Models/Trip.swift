@@ -7,9 +7,6 @@
 
 import MapKit
 
-
-
-
 struct Trip {
     var pickupCoordinates: CLLocationCoordinate2D!
     var destinationCoordinates: CLLocationCoordinate2D!
@@ -17,7 +14,6 @@ struct Trip {
     var driverUid: String?
     
     var state: TripState!
-    
     
     init(passenerUid: String, dictionary: [String: Any]) {
         self.passenerUid = passenerUid

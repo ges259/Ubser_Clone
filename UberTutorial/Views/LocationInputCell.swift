@@ -22,11 +22,6 @@ final class LocationInputCell: UITableViewCell {
     
     
     
-    
-    
-    
-    
-    
     // MARK: - Layout
     private var titleLabel: UILabel = {
         return UILabel().label(LabelTextColor: .darkGray,
@@ -52,29 +47,16 @@ final class LocationInputCell: UITableViewCell {
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
     // MARK: - LifeCycle
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         self.selectionStyle = .none
         
-        
         self.addSubview(self.stackView)
         self.stackView.anchor(leading: self.leadingAnchor,
                               paddingLeading: 12,
                               centerY: self)
-        
-        
-        
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

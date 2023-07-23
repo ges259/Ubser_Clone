@@ -17,8 +17,6 @@ final class SignUpController: UIViewController {
     
     
     
-    
-    
     // MARK: - Label
     private let titleLabel: UILabel = {
         return UILabel().label(labelText: "UBER",
@@ -26,18 +24,6 @@ final class SignUpController: UIViewController {
                                fontName: .system,
                                fontSize: 36)
     }()
-    
-    /*
-     let lbl = UILabel ()
-     
-     lbl.text = "UBER"
-//        lbl.font = UIFont(name: "Avenir-Light", size: 36)
-     lbl.font = UIFont(name: "Avenir-Light", size: 36)
-     lbl.textColor = UIColor(white: 1, alpha: 0.8)
-     
-     return lbl
-     */
-    
     
     
     
@@ -125,26 +111,20 @@ final class SignUpController: UIViewController {
         return sc
     }()
                                                
-                                               
-    
-    
     
     
     // MARK: - StackView
     private lazy var stackView: UIStackView = {
-        let stv = UIStackView(arrangedSubviews: [self.emailContainerView,
-                                                 self.passwordContainerView,
-                                                 self.fullNameContainerView,
-                                                 self.accountTypeContainerView,
-                                                 self.signUpButton])
-        stv.spacing = 24
-        stv.axis = .vertical
-        stv.distribution = .fill
-        stv.alignment = .fill
-        
-        return stv
+        return UIStackView().stackView(arrangedSubviews: [self.emailContainerView,
+                                                          self.passwordContainerView,
+                                                          self.fullNameContainerView,
+                                                          self.accountTypeContainerView,
+                                                          self.signUpButton],
+                                       axis: .vertical,
+                                       distribution: .fill,
+                                       alignment: .fill,
+                                       spacing: 24)
     }()
-    
     
     
     
@@ -170,7 +150,6 @@ final class SignUpController: UIViewController {
             // 유저의 아이디 불러오기
             guard let uid = result?.user.uid else { return }
             
-            
             // dictionary 만들기
             let values = [DB_String.email: email,
                           DB_String.fullName: fullName,
@@ -189,37 +168,36 @@ final class SignUpController: UIViewController {
         }
     }
     
-private func updateUserDataAndShowHomeController(uid: String, values: [String: Any]) {
-    // dictionary를 바탕으로 uid에 유저에 관한 정보 업데이트
-    REF_USERS.child(uid).updateChildValues(values) { error, ref in
-        
-        guard let controller = UIApplication.shared.keyWindow?.rootViewController as? HomeController else { return }
-        
-        // mapkit 활성화
-        controller.configure()
-        
-        // HomeController로 이동
-        self.dismiss(animated: true)
-        print("Successfully registerd user and saved data..")
-    }
-}
-    
-    
-    
-    
-    
     
     
     // MARK: - Helper Functions
+    private func updateUserDataAndShowHomeController(uid: String, values: [String: Any]) {
+        // dictionary를 바탕으로 uid에 유저에 관한 정보 업데이트
+        REF_USERS.child(uid).updateChildValues(values) { error, ref in
+            
+            guard let controller = UIApplication.shared.keyWindow?.rootViewController as? HomeController else { return }
+            
+            // mapkit 활성화
+            controller.configure()
+            
+            // HomeController로 이동
+            self.dismiss(animated: true)
+            print("Successfully registerd user and saved data..")
+        }
+    }
+    
+    
+    
+    // MARK: - configure UI
     private func configureUI() {
         
         // set background color
         self.view.backgroundColor = UIColor.backgroundColor
         
-        
         // configure UI
         self.view.addSubview(self.titleLabel)
-        self.titleLabel.anchor(top: self.view.topAnchor, paddingTop: 55,
+        self.titleLabel.anchor(top: self.view.topAnchor,
+                               paddingTop: 55,
                                centerX: self.view)
         
         self.view.addSubview(self.stackView)
@@ -244,12 +222,6 @@ private func updateUserDataAndShowHomeController(uid: String, values: [String: A
     
     
     
-    
-    
-    
-    
-    
-    
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -259,8 +231,5 @@ private func updateUserDataAndShowHomeController(uid: String, values: [String: A
         
         // configure UI
         self.configureUI()
-        
-        print("DEBUG: Location is \(self.location)")
-        
     }
 }

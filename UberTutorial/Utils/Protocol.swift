@@ -5,7 +5,6 @@
 //  Created by 계은성 on 2023/07/19.
 //
 
-//import Foundation
 
 protocol LocationInputActivationViewDelegate: AnyObject {
     func presentLocationInputView()
@@ -17,8 +16,10 @@ protocol LocationInputViewDelegate: AnyObject {
 }
 
 protocol RideActionViewDelegate: AnyObject {
-//    func uploadTrip(_ view: RideActionView)
     func uploadTrip()
+    func cancelTrip()
+    func pickupPassenger()
+    func dropOffPassenger()
 }
 
 protocol PickupControllerDelegate: AnyObject {

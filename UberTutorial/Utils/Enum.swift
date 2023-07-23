@@ -7,14 +7,22 @@
 
 //import Foundation
 
-// service
+
+// Extensions - UIButton
+enum FontStyle {
+    case system
+    case bold
+    case AvenirLight
+}
+// Trip
 enum TripState: Int {
     case requested
     case accepted
+    case driverArrived
     case inProgress
+    case arrivedAtDestination
     case completed
 }
-
 // HomeController
 enum ActionButtonConfiguration {
     case ShowMenu
@@ -24,12 +32,15 @@ enum ActionButtonConfiguration {
         self = .ShowMenu
     }
 }
-
-
+enum AnnotationType: String {
+    case pickup
+    case destination
+}
 // RideActionView
 enum RideActionViewConfiguration {
     case requestRide
     case tripAccepted
+    case driverArrived
     case pickupPassenger
     case tripInprogress
     case endTrip
@@ -60,4 +71,8 @@ enum ButtonAction: CustomStringConvertible {
 }
 
 
-
+// User
+enum AcccountType: Int {
+    case passenger
+    case driver
+}

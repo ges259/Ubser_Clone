@@ -9,11 +9,8 @@ import UIKit
 
 final class LocationInputView: UIView {
     
-    
     // MARK: - Properties
     weak var delegate: LocationInputViewDelegate?
-    
-    
     
     var user: User? {
         didSet {
@@ -24,7 +21,7 @@ final class LocationInputView: UIView {
     
     
     // MARK: - Button
-    private let backButton: UIButton = {
+    private lazy var backButton: UIButton = {
         let btn = UIButton(type: .system)
         
         btn.setImage(#imageLiteral(resourceName: "baseline_arrow_back_black_36dp").withRenderingMode(.alwaysOriginal), for: .normal)
@@ -42,6 +39,8 @@ final class LocationInputView: UIView {
                                fontName: .system,
                                fontSize: 16)
     }()
+    
+    
     
     // MARK: - View
     private let startLocationIndicatorView: UIView = {
@@ -67,7 +66,6 @@ final class LocationInputView: UIView {
                                        keyboardType: .webSearch,
                                        paddingLeftView: true)
     }()
-    
     private lazy var destinationLocationTextField: UITextField = {
         let tf = UITextField().textField(withPlaceholder: "Enter a destination..",
                                          backgroundColor: .systemGray4,
@@ -75,7 +73,6 @@ final class LocationInputView: UIView {
                                          fontSize: 14,
                                          keyboardType: .webSearch,
                                          paddingLeftView: true)
-        
         tf.delegate = self
         
         return tf
@@ -83,14 +80,10 @@ final class LocationInputView: UIView {
     
     
     
-    
-    
-    
     // MARK: - Selectors
     @objc private func handleBackTapped() {
         self.delegate?.dismissLocationInputView()
     }
-    
     
     
     
@@ -103,6 +96,7 @@ final class LocationInputView: UIView {
         // setting shadow
         self.addShadow()
         
+        // configure UI
         self.addSubview(self.backButton)
         self.backButton.anchor(top: self.safeAreaLayoutGuide.topAnchor,
                                paddingTop: 0,
@@ -156,17 +150,11 @@ final class LocationInputView: UIView {
                                 paddingBottom: 4,
                                 width: 0.5,
                                 centerX: self.startLocationIndicatorView)
-        
-        
-        
-        
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
-
 
 
 

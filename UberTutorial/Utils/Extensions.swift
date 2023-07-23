@@ -15,7 +15,6 @@ extension UIColor {
     static func rgb(red: CGFloat, green: CGFloat, blue: CGFloat) -> UIColor {
         return UIColor.init(red: red/255, green: green/255, blue: blue/255, alpha: 1.0)
     }
-    
     static let backgroundColor = UIColor.rgb(red: 25, green: 25, blue: 25)
     static let mainBlueColor = UIColor.rgb(red: 17, green: 154, blue: 237)
 }
@@ -36,7 +35,6 @@ extension UITextField {
     -> UITextField {
         
         let tf = UITextField()
-        
         
         // set keyboardType
         tf.keyboardType = keyboardType
@@ -63,8 +61,6 @@ extension UITextField {
             tf.leftViewMode = .always
         }
         
-        
-        
         tf.borderStyle = .none
         
         tf.autocapitalizationType = .none
@@ -77,13 +73,6 @@ extension UITextField {
     }
 }
 
-
-// MARK: - enum
-enum FontStyle {
-    case system
-    case bold
-    case AvenirLight
-}
 
 
 // MARK: - UILabel
@@ -102,6 +91,7 @@ extension UILabel {
             lbl.text = labelText
             lbl.textColor = LabelTextColor
         }
+        
         // font
         if let fontSize = fontSize {
             if fontName == .system {
@@ -112,7 +102,6 @@ extension UILabel {
                 lbl.font = UIFont(name: "Avenir-Light", size: fontSize)
             }
         }
-        
         return lbl
     }
 }
@@ -120,14 +109,13 @@ extension UILabel {
 
 
 // MARK: - UIStackView
-
 extension UIStackView {
     
     func stackView(arrangedSubviews: [UIView],
                    axis: NSLayoutConstraint.Axis? = .vertical,
                    distribution: UIStackView.Distribution? = nil,
-                   spacing: CGFloat? = nil,
-                   alignment: UIStackView.Alignment? = nil)
+                   alignment: UIStackView.Alignment? = nil,
+                   spacing: CGFloat? = nil)
     -> UIStackView {
         
         let stv = UIStackView(arrangedSubviews: arrangedSubviews)
@@ -150,64 +138,48 @@ extension UIStackView {
 
 
 
+// MARK: - UIButton
+extension UIButton {
 
+    func button(type: UIButton.ButtonType,
+                title: String? = "",
+                textColor: UIColor? = UIColor.black,
+                backgroundColor: UIColor? = .clear,
+                fontName: FontStyle? = .system,
+                fontSize: CGFloat? = 18,
+                image: String? = nil) {
+        // type
+        let btn = UIButton(type: type)
 
+        // text
+        if let title = title {
+            btn.setTitle(title, for: .normal)
+            btn.titleLabel?.textColor = textColor
+        }
+        
+        // font
+        if let fontSize = fontSize {
+            if fontName == .system {
+                btn.titleLabel?.font = UIFont.systemFont(ofSize: fontSize)
+            } else if fontName == .bold {
+                btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: fontSize)
+            } else {
+                btn.titleLabel?.font = UIFont(name: "Avenir-Light", size: fontSize)
+            }
+        }
 
-
-
-
-//// MARK: - UIButton
-//extension UIButton {
-//
-//    func button(type: UIButton.ButtonType,
-//                title: String? = "",
-//                textColor: UIColor? = UIColor.black,
-//                fontName: FontStyle? = .system,
-//                fontSize: CGFloat? = 18,
-//                image: String? = nil) {
-//        // type
-//        let btn = UIButton(type: type)
-//
-//        // text
-//        if let title = title {
-//            btn.setTitle(title, for: .normal)
-//            btn.titleLabel?.textColor = textColor
-//        }
-//
-//        // font
-//        if let fontSize = fontSize {
-//            if fontName == .system {
-//                btn.titleLabel?.font = UIFont.systemFont(ofSize: fontSize)
-//            } else if fontName == .bold {
-//                btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: fontSize)
-//            } else {
-//                btn.titleLabel?.font = UIFont(name: "Avenir-Light", size: fontSize)
-//            }
-//        }
-//
-//        // image
-//        if let image = image {
-//            btn.setImage(#imageLiteral(resourceName: image), for: .normal)
-//        }
-//    }
-//}
-
-
-
-
-
-
-
-
-
-
-
-
+        // image
+        if let image = image {
+            btn.setImage(#imageLiteral(resourceName: image), for: .normal)
+        }
+    }
+}
 
 
 
 // MARK: - UIView
 extension UIView {
+    
     
     
     // MARK: - Login - ContainerView
@@ -221,7 +193,6 @@ extension UIView {
         img.image = image
         img.alpha = 0.87
         view.addSubview(img)
-        
         
         // Use TextField
         if let textField = textField {
@@ -256,8 +227,6 @@ extension UIView {
                       paddingCenterY: 5)
         }
         
-        
-        
         let separatorView = UIView()
         separatorView.backgroundColor = .lightGray
         view.addSubview(separatorView)
@@ -266,10 +235,9 @@ extension UIView {
                              paddingLeading: 8,
                              trailing: view.trailingAnchor,
                              height: 0.75)
-        
-        
         return view
     }
+    
     
     
     // MARK: - Anchor
@@ -325,7 +293,6 @@ extension UIView {
     
     
     
-    
     // MARK: - Shadow
     func addShadow() {
         // shadow setting
@@ -338,6 +305,7 @@ extension UIView {
     
     
     
+    // MARK: - backgroundColorView
     func backgrouncColorView(backgroundColor color: UIColor) -> UIView {
         let view = UIView()
         
@@ -364,6 +332,7 @@ extension MKPlacemark {
 }
 
 
+
 // MARK: - MapView
 extension MKMapView {
     func zoomToFit(annotations: [MKAnnotation]) {
@@ -378,8 +347,18 @@ extension MKMapView {
                                       height: 0.01)
             zoomRect = zoomRect.union(pointRect)
         }
-        let insets = UIEdgeInsets(top: 100, left: 75, bottom: 350, right: 75)
+        let insets = UIEdgeInsets(top: 120, left: 100, bottom: 350, right: 100)
         setVisibleMapRect(zoomRect, edgePadding: insets, animated: true)
+    }
+    // 주석 만드는 코드
+    func addAnnotationAndSelect(forPlacemark coordinate: CLLocationCoordinate2D) {
+        // 주석 달기
+        let anno = MKPointAnnotation()
+        anno.coordinate = coordinate
+        addAnnotation(anno)
+
+        // 주석의 크기를 키우고 애니메이션을 추가
+        selectAnnotation(anno, animated: true)
     }
 }
 
@@ -387,6 +366,19 @@ extension MKMapView {
 
 // MARK: - UIViewController
 extension UIViewController {
+    
+    
+    
+    // MARK: - presentAlertController
+    func presentAlertController(withTitle title: String, message: String) {
+        let alertController = UIAlertController(title: title,
+                                                message: message,
+                                                preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+        self.present(alertController, animated: true)
+    }
+    
+    // MARK: - shouldPresentLoadingView
     func shouldPresentLoadingView(_ present: Bool, message: String? = nil) {
 
         if present {
@@ -409,9 +401,10 @@ extension UIViewController {
             label.alpha = 0.87
             
             // loadingView만을 지울 것이기 때문에 loadingView 안에 레이아웃을 넣어야 함
-            self.view.addSubview(loadingView)
             loadingView.addSubview(indicator)
             loadingView.addSubview(label)
+            
+            self.view.addSubview(loadingView)
             
             label.anchor(top: indicator.bottomAnchor,
                          paddingTop: 32,

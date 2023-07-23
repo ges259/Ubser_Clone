@@ -27,7 +27,6 @@ final class LoginController: UIViewController {
     
     
     
-    
     // MARK: - View
     private lazy var emailContainerView: UIView = {
         let view = UIView().inputContainerView(image: #imageLiteral(resourceName: "ic_mail_outline_white_2x"),
@@ -87,23 +86,16 @@ final class LoginController: UIViewController {
     
     
     
-    
     // MARK: - StackView
     private lazy var stackView: UIStackView = {
-        let stv = UIStackView(arrangedSubviews: [self.emailContainerView,
-                                                 self.passwordContainerView,
-                                                 self.loginButton])
-        stv.spacing = 16
-        stv.axis = .vertical
-        stv.distribution = .fillEqually
-        stv.alignment = .fill
-        
-        return stv
+        return UIStackView().stackView(arrangedSubviews: [self.emailContainerView,
+                                                          self.passwordContainerView,
+                                                          self.loginButton],
+                                       axis: .vertical,
+                                       distribution: .fillEqually,
+                                       alignment: .fill,
+                                       spacing: 16)
     }()
-    
-    
-    
-    
     
     
     
@@ -125,7 +117,6 @@ final class LoginController: UIViewController {
                 return
             }
 
-            
             guard let controller = UIApplication.shared.keyWindow?.rootViewController as? HomeController else { return }
             
             // mapkit 활성화
@@ -139,11 +130,7 @@ final class LoginController: UIViewController {
     
     
     
-    
-    
-    
-    
-    // MARK: - Helper Functions
+    // MARK: - Configure UI
     private func configureUI() {
         // configure navigation bar
         self.configureNavigationBar()
@@ -171,14 +158,10 @@ final class LoginController: UIViewController {
                                           centerX: self.view)
     }
     
-    
     private func configureNavigationBar() {
         self.navigationController?.navigationBar.isHidden = true
         self.navigationController?.navigationBar.barStyle = .black
     }
-    
-    
-    
     
     
     

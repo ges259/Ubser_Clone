@@ -9,10 +9,7 @@ import UIKit
 
 final class LocationInputActivationView: UIView {
     
-    
-    
     // MARK: - Properties
-    
     weak var delegate: LocationInputActivationViewDelegate?
     
     
@@ -37,14 +34,10 @@ final class LocationInputActivationView: UIView {
     
     
     
-    
-    
     // MARK: - Selector
     @objc private func handleShowLocationView() {
         delegate?.presentLocationInputView()
     }
-    
-    
     
     
     
@@ -55,9 +48,7 @@ final class LocationInputActivationView: UIView {
         // set background colors
         self.backgroundColor = UIColor.white
         
-        
         self.addShadow()
-        
         
         // autoLayout
         self.addSubview(self.indicatorView)
@@ -77,7 +68,6 @@ final class LocationInputActivationView: UIView {
         self.addGestureRecognizer(tap)
         
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

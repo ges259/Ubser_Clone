@@ -7,13 +7,6 @@
 
 import CoreLocation
 
-
-enum AcccountType: Int {
-    case passenger
-    case driver
-}
-
-
 struct User {
     let uid: String
     let fullName: String
