@@ -175,10 +175,11 @@ final class SignUpController: UIViewController {
         // dictionary를 바탕으로 uid에 유저에 관한 정보 업데이트
         REF_USERS.child(uid).updateChildValues(values) { error, ref in
             
-            guard let controller = UIApplication.shared.keyWindow?.rootViewController as? HomeController else { return }
+            guard let controller = UIApplication.shared.keyWindow?.rootViewController as? ContainerController else { return }
             
             // mapkit 활성화
             controller.configure()
+            
             
             // HomeController로 이동
             self.dismiss(animated: true)

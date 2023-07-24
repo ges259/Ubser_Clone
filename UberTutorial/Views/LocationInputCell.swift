@@ -20,15 +20,23 @@ final class LocationInputCell: UITableViewCell {
         }
     }
     
+//    // SettingController (menu -> settings)
+//    var type: LocationType? {
+//        didSet {
+//            self.titleLabel.text = type?.description
+//            self.addressLabel.text = type?.subtitle
+//        }
+//    }
+    
     
     
     // MARK: - Layout
-    private var titleLabel: UILabel = {
+    let titleLabel: UILabel = {
         return UILabel().label(LabelTextColor: .darkGray,
                                fontName: .system,
                                fontSize: 14)
     }()
-    private var addressLabel: UILabel = {
+    let addressLabel: UILabel = {
         return UILabel().label(LabelTextColor: .darkGray,
                                fontName: .system,
                                fontSize: 14)

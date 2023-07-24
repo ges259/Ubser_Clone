@@ -17,6 +17,21 @@ final class PickupController: UIViewController {
     
     weak var delegate: PickupControllerDelegate?
     
+    private lazy var circularProgressView: CircularProgressView = {
+        let frame = CGRect(x: 0, y: 0, width: 360, height: 360)
+        let cp = CircularProgressView(frame: frame)
+            cp.addSubview(self.mapView)
+        
+        self.mapView.anchor(width: 268,
+                            height: 268,
+                            centerX: cp,
+                            centerY: cp,
+                            paddingCenterY: 32)
+        self.mapView.layer.cornerRadius = 268 / 2
+        
+        return cp
+    }()
+    
     
     
     // MARK: - Layout
@@ -64,6 +79,18 @@ final class PickupController: UIViewController {
         }
     }
     
+    @objc private func animateProgress() {
+        self.circularProgressView.animatePulsatingLayer()
+        self.circularProgressView.setProgressWithAnimation(duration: 5, value: 0) { // 멈추는 곳(?)
+            DriverService.shared.updateTripState(trip: self.trip,
+                                                 state: .denied) { error, ref in
+                // 시간이 다되면 돌아가기
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
+    }
+    
+    
     
     
     // MARK: - Helper Functions
@@ -87,6 +114,11 @@ final class PickupController: UIViewController {
         
         // configure MapView
         self.configureMapView()
+        
+        // animate
+        self.perform(#selector(self.animateProgress), with: nil, afterDelay: 0.5)
+        
+        
     }
     init(trip: Trip) {
         self.trip = trip
@@ -115,20 +147,20 @@ final class PickupController: UIViewController {
                                  paddingLeading: 12,
                                  width: 30,
                                  height: 30)
-        // mapView
-        self.mapView.clipsToBounds = true
-        self.mapView.layer.cornerRadius = 270 / 2
-        self.view.addSubview(self.mapView)
-        self.mapView.anchor(width: 270,
-                            height: 270,
-                            centerX: self.view,
-                            centerY: self.view,
-                            paddingCenterY: -150)
+
+        // circularProgressView
+        self.view.addSubview(self.circularProgressView)
+        self.circularProgressView.anchor(top: self.view.safeAreaLayoutGuide.topAnchor,
+                                         paddingTop: 32,
+                                         width: 360,
+                                         height: 360,
+                                         centerX: self.view)
+        
         
         // pickupLabel
         self.view.addSubview(self.pickupLabel)
-        self.pickupLabel.anchor(top: self.mapView.bottomAnchor,
-                                paddingTop: 16,
+        self.pickupLabel.anchor(top: self.circularProgressView.bottomAnchor,
+                                paddingTop: 32,
                                 centerX: self.view)
         
         // acceptTripBUtton

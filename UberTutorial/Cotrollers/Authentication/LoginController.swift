@@ -117,7 +117,7 @@ final class LoginController: UIViewController {
                 return
             }
 
-            guard let controller = UIApplication.shared.keyWindow?.rootViewController as? HomeController else { return }
+            guard let controller = UIApplication.shared.keyWindow?.rootViewController as? ContainerController else { return }
             
             // mapkit 활성화
             controller.configure()

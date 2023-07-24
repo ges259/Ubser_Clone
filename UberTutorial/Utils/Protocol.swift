@@ -26,4 +26,19 @@ protocol PickupControllerDelegate: AnyObject {
     func didAcceptTrip(_ trip: Trip)
 }
 
+protocol HomeControllerDelegate: AnyObject {
+    func handleMenuToggle()
+}
 
+protocol MenuControllerDelegate: AnyObject {
+    func didSelect(option: MenuOptions)
+}
+
+protocol AddLocationControllerDelegate: AnyObject {
+    func updateLocation(locationString: String, type: LocationType)
+}
+
+
+protocol SettingsControllerDelegate: AnyObject {
+    func updateUser(_ controller: settingController)
+}

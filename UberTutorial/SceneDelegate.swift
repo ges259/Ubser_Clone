@@ -23,7 +23,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 //        let navController = UINavigationController(rootViewController: LoginController())
         
-        window?.rootViewController = HomeController()
+        window?.rootViewController = ContainerController()
         
 //        guard let _ = (scene as? UIWindowScene) else { return }
     }

@@ -11,6 +11,9 @@ import CoreFoundation
 
 struct TableViewIdentifier {
     static let LocationTableViewIdentifier: String = "LocationTableView"
+    static let MenuTableViewIdentifier: String = "MenuCell"
+    // AddLocationController
+    static let justCell: String = "Cell"
     
     init() {}
 }

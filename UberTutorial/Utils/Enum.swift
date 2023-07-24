@@ -5,9 +5,6 @@
 //  Created by 계은성 on 2023/07/22.
 //
 
-//import Foundation
-
-
 // Extensions - UIButton
 enum FontStyle {
     case system
@@ -17,6 +14,7 @@ enum FontStyle {
 // Trip
 enum TripState: Int {
     case requested
+    case denied
     case accepted
     case driverArrived
     case inProgress
@@ -69,10 +67,42 @@ enum ButtonAction: CustomStringConvertible {
         self = ButtonAction.requestRide
     }
 }
-
-
 // User
 enum AcccountType: Int {
     case passenger
     case driver
+}
+// menuController
+enum MenuOptions: Int, CaseIterable, CustomStringConvertible {
+    case yourTrips
+    case settings
+    case logout
+    
+    var description: String {
+        switch self {
+        case .yourTrips: return "Your Trips"
+        case .settings: return "Settings"
+        case .logout: return "Log Out"
+        }
+    }
+}
+
+
+// SettingController
+enum LocationType: Int, CaseIterable, CustomStringConvertible {
+    case home
+    case work
+    
+    var description: String {
+        switch self {
+        case .home: return "Home"
+        case .work: return "Work"
+        }
+    }
+    var subtitle: String {
+        switch self {
+        case .home: return "Add Home"
+        case .work: return "Add Work"
+        }
+    }
 }

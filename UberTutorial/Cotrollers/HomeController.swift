@@ -33,15 +33,20 @@ final class HomeController: UIViewController {
     // 검색 후 찾은 배열
     private var searchResults = [MKPlacemark]()
     
+    // home / work placemark
+    private var savedLocations = [MKPlacemark]()
+    
     
     // Service - 싱글톤
     private let driverService = DriverService.shared
     private let passengerService = PassengerService.shared
     private let service = Service.shared
     
+    // HomeController - Delegate
+    weak var delegate: HomeControllerDelegate?
     
     // didSet Properties
-    private var user: User? {
+    var user: User? {
         didSet {
             self.locationInputView.user = user
             
@@ -53,6 +58,9 @@ final class HomeController: UIViewController {
                 self.configureLocationInputActivationView()
                 //
                 self.observeCurrentTrip()
+                
+                self.configureSavedUserLocations()
+                
             // 유저가 driver인 경우
             } else {
                 // passenger가 driver찾기 버튼을 누르면
@@ -101,7 +109,7 @@ final class HomeController: UIViewController {
     @objc private func actionButtonPressed() {
         switch actionButtonConfig {
         case .ShowMenu:
-            print("DEBUG: Handle show menu..")
+            self.delegate?.handleMenuToggle()
         case .dismissActionView:
             // 주석 및 polyline삭제
             self.removeAnnotationsAndOverlays()
@@ -121,11 +129,6 @@ final class HomeController: UIViewController {
     
         
     // MARK: - Configure UI
-    func configure() {
-        self.configureUI()
-         
-        self.fetchUserData()
-    }
     private func configureUI() {
         // 맵뷰 생성
         self.configureMapView()
@@ -227,10 +230,33 @@ final class HomeController: UIViewController {
         self.mapView.delegate = self
     }
     
+    private func configureSavedUserLocations() {
+        guard let user = self.user else { return }
+        
+        self.savedLocations.removeAll()
+        
+        if let homeLocation = user.homeLocation {
+            self.geocodeAddressString(address: homeLocation)
+        }
+        
+        if let workLocation = user.workLocation {
+            self.geocodeAddressString(address: workLocation)
+        }
+    }
     
-    
-    
-    
+    private func geocodeAddressString(address: String) {
+        let geocoder = CLGeocoder()
+        
+        geocoder.geocodeAddressString(address) { placemarks, error in
+            guard let clPlacemark = placemarks?.first else { return }
+            
+            let placemark = MKPlacemark(placemark: clPlacemark)
+            
+            self.savedLocations.append(placemark)
+            
+            self.tableView.reloadData()
+        }
+    }
     
     
     
@@ -304,41 +330,8 @@ final class HomeController: UIViewController {
     
     
     // MARK: - Share API
-    private func fetchUserData() {
-        guard let currentUid = Auth.auth().currentUser?.uid else { return }
-        
-        self.service.fetchUserData(uid: currentUid) { user in
-            self.user = user
-        }
-    }
-    
-    private func checkIfUserIsLoggedIn() {
-        if Auth.auth().currentUser?.uid == nil {
-            print("DEBUG: User is not logged in")
-            DispatchQueue.main.async {
-                let nav = UINavigationController(rootViewController: LoginController())
-                nav.modalPresentationStyle = .fullScreen
-                self.present(nav, animated: true, completion: nil)
-            }
-        } else {
-            print("DEBUG: User is logged in")
-            self.configure()
-        }
-    }
-    // sign out
-    private func signOut() {
-        do {
-            try Auth.auth().signOut()
-            DispatchQueue.main.async {
-                let nav = UINavigationController(rootViewController: LoginController())
-                nav.modalPresentationStyle = .fullScreen
-                self.present(nav, animated: true, completion: nil)
-            }
-        } catch {
-            print("DEBUG: Error signin out")
-        }
-    }
-    
+
+
     
     
     // MARK: - Passenger API
@@ -354,6 +347,17 @@ final class HomeController: UIViewController {
             switch state {
             case .requested:
                 break
+                
+            case .denied:
+                self.shouldPresentLoadingView(false)
+                self.presentAlertController(withTitle: "Oops",
+                                            message: "It looks like we couldn't find you a driver. please try again..")
+                self.passengerService.deleteTrip { error, ref in
+                    self.centerMapOnUserLocation()
+                    self.configureActionButton(config: .ShowMenu)
+                    self.inputActivationView.alpha = 1
+                    self.removeAnnotationsAndOverlays()
+                }
                 
                 
             case .accepted:
@@ -497,10 +501,12 @@ final class HomeController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // configure UI 포함
-        self.checkIfUserIsLoggedIn()
+        // configure UI
+        self.configureUI()
 
         self.enableLoactionServices()
+        
+        
     }
 }
 
@@ -591,6 +597,7 @@ private extension HomeController {
                 // results에 데이터 추가
                 results.append(item.placemark)
             }
+            
             completion(results)
         }
     }
@@ -599,11 +606,11 @@ private extension HomeController {
         // 요청서를 만듦
         let request = MKDirections.Request()
         // 현재 위치
-        request.source = MKMapItem.forCurrentLocation()
+            request.source = MKMapItem.forCurrentLocation()
         // 도착지
-        request.destination = destination
+            request.destination = destination
         // 자동으로 길 찾아주도록
-        request.transportType = .automobile
+            request.transportType = .automobile
         
         // 여기서 요청을 전달
         let directionRequest = MKDirections(request: request)
@@ -720,7 +727,7 @@ extension HomeController: LocationInputViewDelegate {
 extension HomeController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return section == 0 ? "이전 검색 결과" : "검색 결과"
+        return section == 0 ? "Saved Locations" : "Results"
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -728,11 +735,15 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? 2 : searchResults.count
+        return section == 0 ? self.savedLocations.count : searchResults.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: TableViewIdentifier.LocationTableViewIdentifier, for: indexPath) as! LocationInputCell
+        
+        if indexPath.section == 0 {
+            cell.placemark = savedLocations[indexPath.row]
+        }
         
         if indexPath.section == 1 {
             cell.placemark = searchResults[indexPath.row]
@@ -747,8 +758,10 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
     
     // didSelectRowAt
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         // address 불러오기
-        let selectedPlacemark = searchResults[indexPath.row]
+        let selectedPlacemark = indexPath.section == 0 ? savedLocations[indexPath.row] : searchResults[indexPath.row]
+        
         // 버튼 바꾸기
         self.configureActionButton(config: .dismissActionView)
         // 도착지를 맵 아이템으로 만들기
@@ -803,7 +816,7 @@ extension HomeController: MKMapViewDelegate {
             
             let view = MKAnnotationView(annotation: annotation,
                                         reuseIdentifier: AnnotationIdentifier.annotationIdentifer)
-            view.image = #imageLiteral(resourceName: "chevron-sign-to-right")
+                view.image = #imageLiteral(resourceName: "chevron-sign-to-right")
             return view
         }
         return nil
@@ -813,8 +826,8 @@ extension HomeController: MKMapViewDelegate {
         if let route = self.route {
             let polyline = route.polyline
             let lineRenderer = MKPolylineRenderer(overlay: polyline)
-            lineRenderer.strokeColor = .mainBlueColor
-            lineRenderer.lineWidth = 4
+                lineRenderer.strokeColor = .mainBlueColor
+                lineRenderer.lineWidth = 4
             return lineRenderer
         }
         return MKOverlayRenderer()
