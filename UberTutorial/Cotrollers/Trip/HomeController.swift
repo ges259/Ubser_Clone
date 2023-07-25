@@ -908,17 +908,20 @@ extension HomeController: PickupControllerDelegate {
             // Service -> updateTripState
         self.trip = trip
         // 주석 만들기
-            let anno = MKPointAnnotation()
-            anno.coordinate = trip.pickupCoordinates
-            self.mapView.addAnnotation(anno)
-            
-            // 주석의 크기를 키움
-            self.mapView.selectAnnotation(anno, animated: true)
+        let anno = MKPointAnnotation()
+        anno.coordinate = trip.pickupCoordinates
+        self.mapView.addAnnotation(anno)
+        
+        
+        
+        // 주석의 크기를 키움
+        self.mapView.selectAnnotation(anno, animated: true)
         
         self.mapView.addAnnotationAndSelect(forPlacemark: trip.pickupCoordinates)
 
+        
         // circular region
-            // drivedArrived 이후
+        // drivedArrived 이후
         self.setCustomRegion(withType: .pickup,
                              coordinates: trip.pickupCoordinates)
         

@@ -262,12 +262,10 @@ extension ContainerController: MenuControllerDelegate {
                 guard let user = self.user else { return }
                 
                 let settingController = settingController(user: user)
-                    // delegate
-                    settingController.delegate = self
+                // delegate
+                settingController.delegate = self
                 
                 let nav = UINavigationController(rootViewController: settingController)
-                    nav.isModalInPresentation = true
-//                    nav.modalPresentationStyle = .fullScreen
                 
                 self.present(nav, animated: true, completion: nil)
                 

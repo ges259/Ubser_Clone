@@ -38,6 +38,8 @@
 		5F9A9D322A6B15C600A304F2 /* Enum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9A9D312A6B15C600A304F2 /* Enum.swift */; };
 		5F9EB6532A6932440043E6C7 /* DriverAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9EB6522A6932440043E6C7 /* DriverAnnotation.swift */; };
 		5F9EB6552A69AFCF0043E6C7 /* RideActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9EB6542A69AFCF0043E6C7 /* RideActionView.swift */; };
+		5FD613BF2A7003C20044E870 /* LocationResultController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD613BE2A7003C20044E870 /* LocationResultController.swift */; };
+		5FD613C12A70337A0044E870 /* LocationResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD613C02A70337A0044E870 /* LocationResultView.swift */; };
 		5FED97CE2A667D2B002D0FB9 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FED97CD2A667D2B002D0FB9 /* HomeController.swift */; };
 /* End PBXBuildFile section */
 
@@ -76,6 +78,8 @@
 		5F9A9D312A6B15C600A304F2 /* Enum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enum.swift; sourceTree = "<group>"; };
 		5F9EB6522A6932440043E6C7 /* DriverAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverAnnotation.swift; sourceTree = "<group>"; };
 		5F9EB6542A69AFCF0043E6C7 /* RideActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideActionView.swift; sourceTree = "<group>"; };
+		5FD613BE2A7003C20044E870 /* LocationResultController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationResultController.swift; sourceTree = "<group>"; };
+		5FD613C02A70337A0044E870 /* LocationResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationResultView.swift; sourceTree = "<group>"; };
 		5FED97CD2A667D2B002D0FB9 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		A169293E09EC2E20FD1A4968 /* Pods-UberTutorial.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UberTutorial.release.xcconfig"; path = "Target Support Files/Pods-UberTutorial/Pods-UberTutorial.release.xcconfig"; sourceTree = "<group>"; };
 		E3F204E9AE8E456B3D7B0F94 /* Pods_UberTutorial.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UberTutorial.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,7 +110,6 @@
 			isa = PBXGroup;
 			children = (
 				5F3A633E2A6E6A5300581DC8 /* MenuController.swift */,
-				5F3A63402A6E6AAA00581DC8 /* ContainerController.swift */,
 			);
 			path = SideMenu;
 			sourceTree = "<group>";
@@ -116,6 +119,7 @@
 			children = (
 				5F3A63442A6EB5C600581DC8 /* SettingController.swift */,
 				5F3A63492A6ED5E500581DC8 /* AddLocationController.swift */,
+				5FD613BE2A7003C20044E870 /* LocationResultController.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -170,13 +174,11 @@
 		5F4414602A65607B00BAF781 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				5F56A0DB2A6707CA00CD1825 /* LocationInputActivationView.swift */,
-				5F56A0DF2A67ABC200CD1825 /* LocationInputView.swift */,
-				5F56A0E52A67D50A00CD1825 /* LocationInputCell.swift */,
-				5F9EB6542A69AFCF0043E6C7 /* RideActionView.swift */,
-				5F3A63422A6E776200581DC8 /* MenuHeader.swift */,
-				5F3A63462A6ECB7200581DC8 /* UserInfoHeader.swift */,
-				5F3A634B2A6EFD4D00581DC8 /* CircularProgressView.swift */,
+				5FD613B82A6FC3B30044E870 /* TripViews */,
+				5FD613B92A6FC3BB0044E870 /* SearchViews */,
+				5FD613BA2A6FC3C30044E870 /* SettingViews */,
+				5FD613B72A6FC3A20044E870 /* SideMenuViews */,
+				5FD613BB2A6FC3D10044E870 /* AnimationViews */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -184,11 +186,11 @@
 		5F4414612A65608A00BAF781 /* Cotrollers */ = {
 			isa = PBXGroup;
 			children = (
+				5F3A63402A6E6AAA00581DC8 /* ContainerController.swift */,
+				5FD613B62A6FC3830044E870 /* Trip */,
 				5F3A63482A6ED5C900581DC8 /* Settings */,
 				5F3A633D2A6E6A3F00581DC8 /* SideMenu */,
 				5F3A633C2A6E6A2000581DC8 /* Authentication */,
-				5FED97CD2A667D2B002D0FB9 /* HomeController.swift */,
-				5F2B29622A6A8D4400385E4C /* PickupController.swift */,
 			);
 			path = Cotrollers;
 			sourceTree = "<group>";
@@ -213,6 +215,58 @@
 				5F56A0EF2A6841C400CD1825 /* LocationHandler.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		5FD613B62A6FC3830044E870 /* Trip */ = {
+			isa = PBXGroup;
+			children = (
+				5FED97CD2A667D2B002D0FB9 /* HomeController.swift */,
+				5F2B29622A6A8D4400385E4C /* PickupController.swift */,
+			);
+			path = Trip;
+			sourceTree = "<group>";
+		};
+		5FD613B72A6FC3A20044E870 /* SideMenuViews */ = {
+			isa = PBXGroup;
+			children = (
+				5F3A63422A6E776200581DC8 /* MenuHeader.swift */,
+			);
+			path = SideMenuViews;
+			sourceTree = "<group>";
+		};
+		5FD613B82A6FC3B30044E870 /* TripViews */ = {
+			isa = PBXGroup;
+			children = (
+				5F9EB6542A69AFCF0043E6C7 /* RideActionView.swift */,
+			);
+			path = TripViews;
+			sourceTree = "<group>";
+		};
+		5FD613B92A6FC3BB0044E870 /* SearchViews */ = {
+			isa = PBXGroup;
+			children = (
+				5F56A0DB2A6707CA00CD1825 /* LocationInputActivationView.swift */,
+				5F56A0DF2A67ABC200CD1825 /* LocationInputView.swift */,
+				5F56A0E52A67D50A00CD1825 /* LocationInputCell.swift */,
+				5FD613C02A70337A0044E870 /* LocationResultView.swift */,
+			);
+			path = SearchViews;
+			sourceTree = "<group>";
+		};
+		5FD613BA2A6FC3C30044E870 /* SettingViews */ = {
+			isa = PBXGroup;
+			children = (
+				5F3A63462A6ECB7200581DC8 /* UserInfoHeader.swift */,
+			);
+			path = SettingViews;
+			sourceTree = "<group>";
+		};
+		5FD613BB2A6FC3D10044E870 /* AnimationViews */ = {
+			isa = PBXGroup;
+			children = (
+				5F3A634B2A6EFD4D00581DC8 /* CircularProgressView.swift */,
+			);
+			path = AnimationViews;
 			sourceTree = "<group>";
 		};
 		703E6A9299E17B0F0A8681E0 /* Pods */ = {
@@ -357,6 +411,7 @@
 				5F44144D2A65604500BAF781 /* SceneDelegate.swift in Sources */,
 				5F56A0F02A6841C400CD1825 /* LocationHandler.swift in Sources */,
 				5F3A634A2A6ED5E500581DC8 /* AddLocationController.swift in Sources */,
+				5FD613BF2A7003C20044E870 /* LocationResultController.swift in Sources */,
 				5F3A634C2A6EFD4D00581DC8 /* CircularProgressView.swift in Sources */,
 				5F3A63432A6E776200581DC8 /* MenuHeader.swift in Sources */,
 				5F3A63452A6EB5C600581DC8 /* SettingController.swift in Sources */,
@@ -368,6 +423,7 @@
 				5F2B29632A6A8D4400385E4C /* PickupController.swift in Sources */,
 				5F56A0E82A67D58D00CD1825 /* String_Constants.swift in Sources */,
 				5F3A633F2A6E6A5300581DC8 /* MenuController.swift in Sources */,
+				5FD613C12A70337A0044E870 /* LocationResultView.swift in Sources */,
 				5F4414652A6560F700BAF781 /* LoginController.swift in Sources */,
 				5F56A0DC2A6707CA00CD1825 /* LocationInputActivationView.swift in Sources */,
 				5F56A0EC2A6817BA00CD1825 /* DB_Constants.swift in Sources */,

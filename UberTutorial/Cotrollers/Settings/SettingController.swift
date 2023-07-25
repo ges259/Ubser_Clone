@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 final class settingController: UITableViewController {
     
@@ -15,7 +16,7 @@ final class settingController: UITableViewController {
     
     weak var delegate: SettingsControllerDelegate?
     
-    var userInfoUpdated = false
+    private let addLocationController = AddLocationController()
     
     // location
     private let locationManager = LocationHandler.shared.locationManager
@@ -31,12 +32,6 @@ final class settingController: UITableViewController {
     
     // MARK: - Selectors
     @objc private func handleDismissal() {
-        if userInfoUpdated {
-            self.delegate?.updateUser(self)
-            // 원상복구
-            self.userInfoUpdated = false
-        }
-        
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -52,6 +47,14 @@ final class settingController: UITableViewController {
         }
     }
     
+    // addLocationController
+//    private func configureAddLocationController() {
+//        let navigationController = UINavigationController(rootViewController: self.addLocationController)
+//        self.addChild(navigationController)
+//        self.view.addSubview(navigationController.view)
+//        navigationController.didMove(toParent: self)
+//    }
+    
     
     
     // MARK: - Configure UI
@@ -65,16 +68,15 @@ final class settingController: UITableViewController {
     }
     
     private func configureNavigationBar() {
+        self.navigationItem.title = "Settings"
         
-        self.navigationController?.navigationBar.prefersLargeTitles = true
+//        self.navigationController?.navigationBar.prefersLargeTitles = true
         self.navigationController?.navigationBar.isTranslucent = false
         
         self.navigationController?.navigationBar.barStyle = .black
         self.navigationController?.navigationBar.barTintColor = UIColor.backgroundColor
-        
+    
         self.navigationController?.navigationBar.backgroundColor = .black
-        
-        self.navigationItem.title = "Settings"
         
         // back Button
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: #imageLiteral(resourceName: "baseline_clear_white_36pt_2x").withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(handleDismissal))
@@ -89,14 +91,8 @@ final class settingController: UITableViewController {
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.view.backgroundColor = UIColor.backgroundColor
-        
-        self.modalPresentationCapturesStatusBarAppearance = true
-        
         self.configureTableView()
         self.configureNavigationBar()
-        
     }
     init(user: User) {
         self.user = user
@@ -121,13 +117,13 @@ extension settingController {
         
         guard let type = LocationType(rawValue: indexPath.row) else { return cell }
         
-        
         cell.titleLabel.text = type.description
         cell.addressLabel.text = locationText(forType: type)
         
         return cell
     }
     
+    // header dataSource
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let blackView = UIView().backgrouncColorView(backgroundColor: UIColor.backgroundColor)
         
@@ -140,9 +136,9 @@ extension settingController {
                      paddingLeading: 16,
                      centerY: blackView)
         
-        
         return blackView
     }
+    
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 40
     }
@@ -151,18 +147,18 @@ extension settingController {
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
     }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let type = LocationType(rawValue: indexPath.row) else { return }
-        guard let location = locationManager?.location else { return }
+
+            
+        let controller = AddLocationController()
+
+        controller.delegate = self
         
-        let addLocationController = AddLocationController(type: type, location: location)
-            // delegate
-            addLocationController.delegate = self
-            addLocationController.isModalInPresentation = true
-        
-        let nav = UINavigationController(rootViewController: addLocationController)
-//        self.navigationController?.pushViewController(nav, animated: true)
-        self.present(nav, animated: true)
+        controller.type = type
+
+        self.navigationController?.pushViewController(controller, animated: true)
     }
 }
 
@@ -175,10 +171,8 @@ extension settingController: AddLocationControllerDelegate {
         
         PassengerService.shared.saveLocation(locationString: locationString,
                                              type: type) { error, ref in
-            self.dismiss(animated: true, completion: nil)
             
-            self.userInfoUpdated = true
-            
+            self.navigationController?.navigationController?.popViewController(animated: true)
             
             switch type {
             case .home:
@@ -189,6 +183,7 @@ extension settingController: AddLocationControllerDelegate {
                 self.user.workLocation = locationString
             }
             
+            self.delegate?.updateUser(self)
             
             self.tableView.reloadData()
         }

@@ -82,11 +82,11 @@ final class PickupController: UIViewController {
     @objc private func animateProgress() {
         self.circularProgressView.animatePulsatingLayer()
         self.circularProgressView.setProgressWithAnimation(duration: 5, value: 0) { // 멈추는 곳(?)
-            DriverService.shared.updateTripState(trip: self.trip,
-                                                 state: .denied) { error, ref in
-                // 시간이 다되면 돌아가기
-                self.dismiss(animated: true, completion: nil)
-            }
+//            DriverService.shared.updateTripState(trip: self.trip,
+//                                                 state: .denied) { error, ref in
+//                // 시간이 다되면 돌아가기
+//                self.dismiss(animated: true, completion: nil)
+//            }
         }
     }
     

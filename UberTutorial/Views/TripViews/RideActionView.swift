@@ -192,7 +192,6 @@ final class RideActionView: UIView {
             
             
         case .tripAccepted:
-            
             // driver인 경우 -> passenger가 누군지 알려줌
             if user.accountType == .passenger {
                 self.titleLabel.text = "En Route To Passenger"

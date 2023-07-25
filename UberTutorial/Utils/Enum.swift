@@ -105,4 +105,10 @@ enum LocationType: Int, CaseIterable, CustomStringConvertible {
         case .work: return "Add Work"
         }
     }
+    var koreanString: String {
+        switch self {
+        case .home: return "집"
+        case .work: return "직장"
+        }
+    }
 }

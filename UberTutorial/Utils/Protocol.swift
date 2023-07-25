@@ -42,3 +42,8 @@ protocol AddLocationControllerDelegate: AnyObject {
 protocol SettingsControllerDelegate: AnyObject {
     func updateUser(_ controller: settingController)
 }
+
+protocol LocationResultControllerDelegate: AnyObject {
+    // , type: LocationType
+    func searchResultLocation(locationString: String)
+}

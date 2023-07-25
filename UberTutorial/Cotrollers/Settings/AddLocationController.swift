@@ -8,26 +8,31 @@
 import UIKit
 import MapKit
 
-final class AddLocationController: UITableViewController {
+final class AddLocationController: UIViewController {
     
     
     // MARK: - Properties
+    
+    lazy var type: LocationType = .home
+    
+    // settingController
     weak var delegate: AddLocationControllerDelegate?
+    
+    
+    
+    private let localResultController = LocationResultController()
 
-    private let searchBar = UISearchBar()
- 
-    private let searchCompleter = MKLocalSearchCompleter()
-    private var searchResults = [MKLocalSearchCompletion]() {
-        didSet {
-            // 테이블뷰에 표시하기 위해 talbeView.reloadData
-            self.tableView.reloadData()
-        }
-    }
+
+    private let searchResultController = UISearchController(searchResultsController: LocationResultController())
+    
+    private var searchResults = [MKLocalSearchCompletion]()
+
+    private lazy var textLabel: UILabel = {
+        return UILabel().label(labelText: "\(String(describing: type.koreanString))의 위치를 설정하세요", LabelTextColor: UIColor.black)
+    }()
     
     
     
-    private let type: LocationType
-    private let location: CLLocation
     
     
     
@@ -41,111 +46,74 @@ final class AddLocationController: UITableViewController {
     
     
     // MARK: - Configure UI
-    private func configureTableView() {
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: TableViewIdentifier.justCell)
-        
-        self.tableView.tableFooterView = UIView()
-        
-        self.tableView.addShadow()
-        
+
+    private func configureNavigation() {
+        self.navigationItem.title = "Find Location"
+
+        self.navigationController?.navigationBar.barStyle = .black
     }
     
-    
-    private func configureSearchBar() {
-        self.searchBar.sizeToFit()
-        self.searchBar.delegate = self
-        navigationItem.titleView = self.searchBar
+    private func configureSearchResultBar() {
+        self.navigationItem.searchController = searchResultController
+        self.searchResultController.searchResultsUpdater = self
+        self.searchResultController.searchBar.autocapitalizationType = .none
+        self.searchResultController.searchBar.autocorrectionType = .no
     }
-    
-    private func configureSearchCompletor() {
-        self.searchCompleter.delegate = self
-        let region = MKCoordinateRegion(center: location.coordinate,
-                                        latitudinalMeters: 2000,
-                                        longitudinalMeters: 2000)
-        self.searchCompleter.region = region
-        
-    }
-    
-    
+
     
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.configureUI()
         
-        self.configureTableView()
+        self.configureSearchResultBar()
         
-        self.configureSearchBar()
+        self.configureNavigation()
         
-        self.configureSearchCompletor()
-        
-        
-    }
-    init(type: LocationType, location: CLLocation) {
-        self.type = type
-        self.location = location
-        
-        super.init(nibName: nil, bundle: nil)
+        self.localResultController.type = self.type
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    
+    
+    // MARK: - Configure UI
+    private func configureUI() {
+        self.view.backgroundColor = .white
+        self.view.addSubview(self.textLabel)
+        self.textLabel.anchor(centerX: self.view,
+                         centerY: self.view, paddingCenterY: -100)
     }
 }
 
 
-// MARK: - TableView
-extension AddLocationController {
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return searchResults.count
-    }
+
+// MARK: - UISearchResultsUpdating
+extension AddLocationController: UISearchResultsUpdating {
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .subtitle,
-                                   reuseIdentifier: TableViewIdentifier.justCell)
+    func updateSearchResults(for searchController: UISearchController) {
         
-        let result = searchResults[indexPath.row]
-        cell.textLabel?.text = result.title
-        cell.detailTextLabel?.text = result.subtitle
+        let vc = searchController.searchResultsController as! LocationResultController
         
-        return cell
+        vc.delegate = self
+        
+        vc.searchTerm = searchController.searchBar.text ?? ""
     }
+}
+
+
+
+
+// MARK: - LocationResultControllerDelegate
+extension AddLocationController: LocationResultControllerDelegate {
     
-    // delegate
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        let result = searchResults[indexPath.row]
-        let title = result.title
-        let subtitle = result.subtitle
-        let locationString = "\(title) \(subtitle)"
+    func searchResultLocation(locationString: String) {
         
         self.delegate?.updateLocation(locationString: locationString, type: self.type)
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
-    }
-}
-
-
-
-// MARK: - UISearchBarDelegate
-extension AddLocationController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        // 검색 텍스트가 변경될 때마다 -> 쿼리 조각을 설정. -> 테이블 뷰 업데이트
-        searchCompleter.queryFragment = searchText
+        
+        
+        // MARK: - BUG
+        // 아예 settingController를 나감
+//        self.searchResultController.isActive = false
     }
 }
-
-
-
-// MARK: - MKLocalSearchCompleterDelegate
-extension AddLocationController: MKLocalSearchCompleterDelegate {
-    // 쿼리 조각을 -> 실제로 반환
-    func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        self.searchResults = completer.results
-    }
-}
-
-
