@@ -11,9 +11,9 @@ final class CircularProgressView: UIView {
     
     // MARK: - Properties
     
-    // 원으로 시간 표시
+    // 원으로 시간 표시 ( 점점 줄어듦 )
     private var progressLayer: CAShapeLayer!
-    
+    // progressLayer의 트랙 색
     private var trackLayer: CAShapeLayer!
     // 맥박(?) 효과
     private var pulsatingLayer: CAShapeLayer!
@@ -42,7 +42,7 @@ final class CircularProgressView: UIView {
     private func circleShapeLayer(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
         let layer = CAShapeLayer()
         
-        let center = CGPoint(x: 0, y: 0)
+        let center = CGPoint(x: 0, y: 32)
         let circularPath = UIBezierPath(arcCenter: center,
                                         radius: self.frame.width / 2.5,
                                         startAngle: -(.pi / 2),
@@ -58,13 +58,12 @@ final class CircularProgressView: UIView {
         return layer
     }
     
-    
     func animatePulsatingLayer() {
         let animation = CABasicAnimation(keyPath: "transform.scale")
             // 애니메이션 크기
             animation.toValue = 1.25
             // 애니메이션 커졌다 - 작아졌다 시간 간격
-            animation.duration = 0.8
+            animation.duration = 1
             // 애니메이션 효과
             animation.timingFunction = CAMediaTimingFunction(name: .easeOut)
             // 자체 재생 ( 알아서 시작 )
@@ -75,14 +74,12 @@ final class CircularProgressView: UIView {
         self.pulsatingLayer.add(animation, forKey: "pulsing")
     }
     
-    func setProgressWithAnimation(duration: TimeInterval,
-                                          value: Float,
-                                          completion: @escaping () -> Void) {
-        
+    func setProgressWithAnimation(duration: TimeInterval, value: Float,
+                                  completion: @escaping () -> Void) {
         CATransaction.begin()
         CATransaction.setCompletionBlock(completion)
         
-        let animation = CABasicAnimation(keyPath: "StrokeEnd")
+        let animation = CABasicAnimation(keyPath: "strokeEnd")
             animation.duration = duration
             animation.fromValue = 1
             animation.toValue = value
@@ -93,8 +90,6 @@ final class CircularProgressView: UIView {
         
         CATransaction.commit()
     }
-    
-    
     
     
     

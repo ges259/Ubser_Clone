@@ -24,7 +24,6 @@
 		5F4414652A6560F700BAF781 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4414642A6560F700BAF781 /* LoginController.swift */; };
 		5F4414672A6573CF00BAF781 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4414662A6573CE00BAF781 /* Extensions.swift */; };
 		5F4414692A659A9F00BAF781 /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F4414682A659A9F00BAF781 /* SignUpController.swift */; };
-		5F44146B2A65A59700BAF781 /* AuthButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F44146A2A65A59700BAF781 /* AuthButton.swift */; };
 		5F44146D2A65B3CF00BAF781 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5F44146C2A65B3CF00BAF781 /* GoogleService-Info.plist */; };
 		5F56A0DC2A6707CA00CD1825 /* LocationInputActivationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0DB2A6707CA00CD1825 /* LocationInputActivationView.swift */; };
 		5F56A0DE2A67A78B00CD1825 /* Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0DD2A67A78B00CD1825 /* Protocol.swift */; };
@@ -39,7 +38,6 @@
 		5F9EB6532A6932440043E6C7 /* DriverAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9EB6522A6932440043E6C7 /* DriverAnnotation.swift */; };
 		5F9EB6552A69AFCF0043E6C7 /* RideActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9EB6542A69AFCF0043E6C7 /* RideActionView.swift */; };
 		5FD613BF2A7003C20044E870 /* LocationResultController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD613BE2A7003C20044E870 /* LocationResultController.swift */; };
-		5FD613C12A70337A0044E870 /* LocationResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD613C02A70337A0044E870 /* LocationResultView.swift */; };
 		5FED97CE2A667D2B002D0FB9 /* HomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FED97CD2A667D2B002D0FB9 /* HomeController.swift */; };
 /* End PBXBuildFile section */
 
@@ -63,7 +61,6 @@
 		5F4414642A6560F700BAF781 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		5F4414662A6573CE00BAF781 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		5F4414682A659A9F00BAF781 /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
-		5F44146A2A65A59700BAF781 /* AuthButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthButton.swift; sourceTree = "<group>"; };
 		5F44146C2A65B3CF00BAF781 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5F56A0DB2A6707CA00CD1825 /* LocationInputActivationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationInputActivationView.swift; sourceTree = "<group>"; };
 		5F56A0DD2A67A78B00CD1825 /* Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocol.swift; sourceTree = "<group>"; };
@@ -79,7 +76,6 @@
 		5F9EB6522A6932440043E6C7 /* DriverAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverAnnotation.swift; sourceTree = "<group>"; };
 		5F9EB6542A69AFCF0043E6C7 /* RideActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RideActionView.swift; sourceTree = "<group>"; };
 		5FD613BE2A7003C20044E870 /* LocationResultController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationResultController.swift; sourceTree = "<group>"; };
-		5FD613C02A70337A0044E870 /* LocationResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationResultView.swift; sourceTree = "<group>"; };
 		5FED97CD2A667D2B002D0FB9 /* HomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeController.swift; sourceTree = "<group>"; };
 		A169293E09EC2E20FD1A4968 /* Pods-UberTutorial.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UberTutorial.release.xcconfig"; path = "Target Support Files/Pods-UberTutorial/Pods-UberTutorial.release.xcconfig"; sourceTree = "<group>"; };
 		E3F204E9AE8E456B3D7B0F94 /* Pods_UberTutorial.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UberTutorial.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -207,7 +203,6 @@
 			isa = PBXGroup;
 			children = (
 				5F4414662A6573CE00BAF781 /* Extensions.swift */,
-				5F44146A2A65A59700BAF781 /* AuthButton.swift */,
 				5F56A0DD2A67A78B00CD1825 /* Protocol.swift */,
 				5F9A9D312A6B15C600A304F2 /* Enum.swift */,
 				5F56A0E72A67D58D00CD1825 /* String_Constants.swift */,
@@ -248,7 +243,6 @@
 				5F56A0DB2A6707CA00CD1825 /* LocationInputActivationView.swift */,
 				5F56A0DF2A67ABC200CD1825 /* LocationInputView.swift */,
 				5F56A0E52A67D50A00CD1825 /* LocationInputCell.swift */,
-				5FD613C02A70337A0044E870 /* LocationResultView.swift */,
 			);
 			path = SearchViews;
 			sourceTree = "<group>";
@@ -403,7 +397,6 @@
 			files = (
 				5F4414692A659A9F00BAF781 /* SignUpController.swift in Sources */,
 				5F56A0EA2A6815B400CD1825 /* Service.swift in Sources */,
-				5F44146B2A65A59700BAF781 /* AuthButton.swift in Sources */,
 				5F9EB6532A6932440043E6C7 /* DriverAnnotation.swift in Sources */,
 				5FED97CE2A667D2B002D0FB9 /* HomeController.swift in Sources */,
 				5F44144B2A65604500BAF781 /* AppDelegate.swift in Sources */,
@@ -423,7 +416,6 @@
 				5F2B29632A6A8D4400385E4C /* PickupController.swift in Sources */,
 				5F56A0E82A67D58D00CD1825 /* String_Constants.swift in Sources */,
 				5F3A633F2A6E6A5300581DC8 /* MenuController.swift in Sources */,
-				5FD613C12A70337A0044E870 /* LocationResultView.swift in Sources */,
 				5F4414652A6560F700BAF781 /* LoginController.swift in Sources */,
 				5F56A0DC2A6707CA00CD1825 /* LocationInputActivationView.swift in Sources */,
 				5F56A0EC2A6817BA00CD1825 /* DB_Constants.swift in Sources */,

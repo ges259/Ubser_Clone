@@ -35,25 +35,26 @@ final class PickupController: UIViewController {
     
     
     // MARK: - Layout
-    private let cancelButton: UIButton = {
-        let btn = UIButton(type: .system)
+    private lazy var cancelButton: UIButton = {
+        let btn = UIButton().button(title: nil,
+                                    fontName: nil,
+                                    fontSize: nil,
+                                    image: "baseline_clear_white_36pt_2x")
         
-        btn.setImage(#imageLiteral(resourceName: "baseline_clear_white_36pt_2x"), for: .normal)
+//        btn.setImage(#imageLiteral(resourceName: "baseline_clear_white_36pt_2x"), for: .normal)
         btn.addTarget(self, action: #selector(handleDismissal), for: .touchUpInside)
         
         return btn
     }()
     
-    private let acceptTripBUtton: UIButton = {
-        let btn = UIButton(type: .system)
+    private lazy var acceptTripBUtton: UIButton = {
+        let btn = UIButton().button(title: "ACCEPT TRIP",
+                                    titleColor: .black,
+                                    fontName: .bold,
+                                    fontSize: 20,
+                                    backgroundColor: .white)
         
-        btn.backgroundColor = .white
-        btn.setTitle("ACCEPT TRIP", for: .normal)
-        btn.setTitleColor(.black, for: .normal)
-        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        
-        
-        btn.addTarget(self, action: #selector(handleAcceptTrip), for: .touchUpInside)
+        btn.addTarget(self, action: #selector(self.handleAcceptTrip), for: .touchUpInside)
         
         return btn
     }()
@@ -81,7 +82,7 @@ final class PickupController: UIViewController {
     
     @objc private func animateProgress() {
         self.circularProgressView.animatePulsatingLayer()
-        self.circularProgressView.setProgressWithAnimation(duration: 5, value: 0) { // 멈추는 곳(?)
+        self.circularProgressView.setProgressWithAnimation(duration: 15, value: 0) { // 멈추는 곳(?)
 //            DriverService.shared.updateTripState(trip: self.trip,
 //                                                 state: .denied) { error, ref in
 //                // 시간이 다되면 돌아가기

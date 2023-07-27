@@ -71,43 +71,44 @@ final class SignUpController: UIViewController {
     
     
     // MARK: - Button
-    private let signUpButton: AuthButton = {
-        let btn = AuthButton(type: .system)
-        
-        btn.setTitle("Sign Up", for: .normal)
-        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
-        
+    private lazy var signUpButton: UIButton = {
+        let btn = UIButton().button(title: "Sign Up",
+                                    fontName: .bold,
+                                    fontSize: 20,
+                                    Auth: true)
         btn.addTarget(self, action: #selector(handleSignUp), for: .touchUpInside)
-
+        
         return btn
     }()
-    private let alreadyHaveButton: UIButton = {
-        let btn = UIButton(type: .system)
-        
-        let attributedTitle = NSMutableAttributedString(
-            string: "Already have an account?   ",
-            attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16),
-                         NSAttributedString.Key.foregroundColor : UIColor.lightGray]
-        )
-        attributedTitle.append(NSAttributedString(
-            string: "Sign In",
-            attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 16),
-                         NSAttributedString.Key.foregroundColor : UIColor.mainBlueColor])
-        )
-        btn.setAttributedTitle(attributedTitle, for: .normal)
-        
+    private lazy var alreadyHaveButton: UIButton = {
+        let btn = UIButton().mutableAttributedString(
+            buttonType: .system,
+            
+            type1TextString: "Already have an account?   ",
+            type1FontName: .system,
+            type1FontSize: 16,
+            type1Foreground: UIColor.lightGray,
+            
+            type2TextString: "Sign In",
+            type2FontName: .bold,
+            type2FontSize: 16,
+            type2Foreground: UIColor.mainBlueColor)
+ 
         btn.addTarget(self, action: #selector(HandleShowLogin), for: .touchUpInside)
         
         return btn
     }()
 
     
+    
     // MARK: - SegmentControl
     private let accountTypeSegmentedControl: UISegmentedControl = {
         let sc = UISegmentedControl(items: ["Rider", "Driver"])
-        sc.backgroundColor = .backgroundColor
+        
+        sc.backgroundColor = UIColor.backgroundColor
         sc.tintColor = UIColor(white: 1, alpha: 0.87)
         sc.selectedSegmentIndex = 0
+        
         return sc
     }()
                                                
@@ -115,11 +116,12 @@ final class SignUpController: UIViewController {
     
     // MARK: - StackView
     private lazy var stackView: UIStackView = {
-        return UIStackView().stackView(arrangedSubviews: [self.emailContainerView,
-                                                          self.passwordContainerView,
-                                                          self.fullNameContainerView,
-                                                          self.accountTypeContainerView,
-                                                          self.signUpButton],
+        return UIStackView().stackView(arrangedSubviews:
+                                        [self.emailContainerView,
+                                         self.passwordContainerView,
+                                         self.fullNameContainerView,
+                                         self.accountTypeContainerView,
+                                         self.signUpButton],
                                        axis: .vertical,
                                        distribution: .fill,
                                        alignment: .fill,
@@ -179,7 +181,6 @@ final class SignUpController: UIViewController {
             
             // mapkit 활성화
             controller.configure()
-            
             
             // HomeController로 이동
             self.dismiss(animated: true)

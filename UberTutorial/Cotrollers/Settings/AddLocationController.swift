@@ -28,7 +28,8 @@ final class AddLocationController: UIViewController {
     private var searchResults = [MKLocalSearchCompletion]()
 
     private lazy var textLabel: UILabel = {
-        return UILabel().label(labelText: "\(String(describing: type.koreanString))의 위치를 설정하세요", LabelTextColor: UIColor.black)
+        return UILabel().label(labelText: "\(String(describing: type.koreanString))의 위치를 설정하세요",
+                               LabelTextColor: UIColor.black)
     }()
     
     
@@ -111,9 +112,9 @@ extension AddLocationController: LocationResultControllerDelegate {
         
         self.delegate?.updateLocation(locationString: locationString, type: self.type)
         
-        
         // MARK: - BUG
         // 아예 settingController를 나감
+//        dismiss(animated: true)
 //        self.searchResultController.isActive = false
     }
 }

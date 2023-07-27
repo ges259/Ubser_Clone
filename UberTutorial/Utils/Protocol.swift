@@ -25,15 +25,15 @@ protocol RideActionViewDelegate: AnyObject {
 protocol PickupControllerDelegate: AnyObject {
     func didAcceptTrip(_ trip: Trip)
 }
-
+// ContainerController
 protocol HomeControllerDelegate: AnyObject {
     func handleMenuToggle()
 }
-
+// ContainerController
 protocol MenuControllerDelegate: AnyObject {
     func didSelect(option: MenuOptions)
 }
-
+// SettingController
 protocol AddLocationControllerDelegate: AnyObject {
     func updateLocation(locationString: String, type: LocationType)
 }

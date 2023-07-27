@@ -15,10 +15,13 @@ final class RideActionView: UIView {
     
     
     // MARK: - Properties
-    // delegate
+    // HomeController
     var delegate: RideActionViewDelegate?
     
     // enum properties
+        // buttonAction을 바꾸면
+            // -> return으로 상황에 따른 다른 텍스트를 받을 수 있음
+                // -> 따라서 상황에 따른 버튼의 텍스트를 바꿀 수 있음
     var buttonAction = ButtonAction()
     var config = RideActionViewConfiguration() {
         didSet {
@@ -94,12 +97,12 @@ final class RideActionView: UIView {
     
     // MARK: - Button
     private lazy var actionButton: UIButton = {
-        let btn = UIButton(type: .system)
+        let btn = UIButton().button(title: "CONFIRM UBERX",
+                                    titleColor: UIColor.white,
+                                    fontName: .bold,
+                                    fontSize: 20,
+                                    backgroundColor: UIColor.black)
         
-        btn.backgroundColor = .black
-        btn.setTitle("CONFIRM UBERX", for: .normal)
-        btn.setTitleColor(UIColor.white, for: .normal)
-        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
         btn.addTarget(self, action: #selector(actionButtonPressed), for: .touchUpInside)
         
         return btn

@@ -9,9 +9,6 @@ import UIKit
 import FirebaseAuth
 import MapKit
 
-
-
-
 final class HomeController: UIViewController {
     
     // MARK: - Properties
@@ -19,7 +16,6 @@ final class HomeController: UIViewController {
     private let mapView = MKMapView()
     private let locationManager = LocationHandler.shared.locationManager
     private var route: MKRoute?
-
     
     // controller
     private let inputActivationView = LocationInputActivationView()
@@ -36,16 +32,34 @@ final class HomeController: UIViewController {
     // home / work placemark
     private var savedLocations = [MKPlacemark]()
     
-    
     // Service - 싱글톤
     private let driverService = DriverService.shared
     private let passengerService = PassengerService.shared
     private let service = Service.shared
     
-    // HomeController - Delegate
+    // ContainerController - Delegate
     weak var delegate: HomeControllerDelegate?
     
-    // didSet Properties
+    /*
+     // user 바뀌는 경우
+     
+     
+     // driver didSet
+        1. obsereTrips() 호출
+            -> observeTrips로 인해
+            -> observeTrips()가 실행
+            -> service
+            -> (driverServie)observeTrips
+            -> DB에 trips에 사용자가 추가될 대마다 호출
+     
+     // passenger didSet
+        1. driver의 위치를 업데이트
+        2. LocationInputActivationView표시 ( where to? 창 )
+        3. observeCurrentTrip() 표시 현재 상태(state)에 따라 다르게 행동
+            -> rideActionView에 상태 전해주기 ( D - P 간 Trip중일 때 레이블, 버튼 등 이름 바꾸기)
+        4. home / work 업데이트
+     
+     */
     var user: User? {
         didSet {
             self.locationInputView.user = user
@@ -56,9 +70,13 @@ final class HomeController: UIViewController {
                 self.fetchDrivers()
                 // 검색 Label을 띄움
                 self.configureLocationInputActivationView()
-                //
+                // user가 바뀌면 상태(state)에 따라 다르게 행동
+                    // alert창
+                    // 레이블 / 버튼의 텍스트 바꾸기
+                    // 완료 등
+                // RideActionView에서 일어나는 일들은 다 user가 바뀌어 didSst을 통해 이루어짐
                 self.observeCurrentTrip()
-                
+                // SettingController에서 설정한 home / work 위치데이터 저장
                 self.configureSavedUserLocations()
                 
             // 유저가 driver인 경우
@@ -69,13 +87,24 @@ final class HomeController: UIViewController {
             }
         }
     }
-    
+    /*
+     // trip이 바뀌는 경우
+        user가 바뀌면 -> observeTrips로 인해
+        -> observeTrips()가 실행 -> service
+        -> (driverServie)observeTrips
+        -> DB에 trips에 사용자가 추가될 대마다 호출
+     
+     즉, passenger가 도착지를 정하고 버튼(CONFIRM UBERX)을 누르면 실행 됨
+     
+     
+     // trip의 didSet (only driver인 경우)
+        pickupContoller가 올라온다. ( 사용자를 받을것인지 확인하는 창 )
+     */
     private var trip: Trip? {
         didSet {
             guard let user = user else { return }
             
             if user.accountType == .driver {
-                
                 guard let trip = trip else { return }
                 
                 let pickupController = PickupController(trip: trip)
@@ -83,8 +112,6 @@ final class HomeController: UIViewController {
                 pickupController.modalPresentationStyle = .fullScreen
                 
                 self.present(pickupController, animated: true)
-            } else {
-                print("DEBUG: Show ride action view for accepted trip..")
             }
         }
     }
@@ -93,10 +120,9 @@ final class HomeController: UIViewController {
     
     // MARK: - Layout
     private lazy var actionButton: UIButton = {
-        let btn = UIButton(type: .system)
-        
-        btn.setImage(#imageLiteral(resourceName: "baseline_menu_black_36dp").withRenderingMode(.alwaysOriginal), for: .normal)
-        btn.backgroundColor = .clear
+        let btn = UIButton().button(title: nil, fontName: nil, fontSize: nil,
+                                    backgroundColor: .clear,
+                                    image: "baseline_menu_black_36dp")
         
         btn.addTarget(self, action: #selector(actionButtonPressed), for: .touchUpInside)
         
@@ -106,17 +132,26 @@ final class HomeController: UIViewController {
     
     
     // MARK: - Selectors
+    // 버튼(back / menu)의 역할을 정하는 곳
     @objc private func actionButtonPressed() {
         switch actionButtonConfig {
         case .ShowMenu:
+            // 메뉴가 나옴
             self.delegate?.handleMenuToggle()
+            // 메뉴가 들어가는 방법은
+                // containerController의 blackView 클릭 시 들어감
+            
+            
+            // LocationInputActivationView (Where to?)가 나오게 함
+            // 버튼을 메뉴로 바꿈
+            // rideActionView를 들어가게 함
         case .dismissActionView:
             // 주석 및 polyline삭제
             self.removeAnnotationsAndOverlays()
             
             // 화면 축소
             self.mapView.showAnnotations(self.mapView.annotations, animated: true)
-
+            
             UIView.animate(withDuration: 0.3) {
                 self.inputActivationView.alpha = 1
                 self.configureActionButton(config: .ShowMenu)
@@ -163,7 +198,7 @@ final class HomeController: UIViewController {
     
 
     
-    // ActivationLabel을 누르면 뷰가 나옴
+    // ActivationLabel을 누르면 뷰가 나옴 ( 테이블 뷰 )
     // 도착지 정하는 뷰 ( + 테이블뷰 )
     private func configureLocationInputView() {
         // delegate 설정
@@ -186,7 +221,8 @@ final class HomeController: UIViewController {
         }
     }
     
-    // 도착지를 선택하면 보이는 뷰
+    // locationInputView ( 테이블뷰 )에서 도착지를 선택하면 보이는 뷰
+        // 화면 표시
     private func configureRideActionView() {
         self.rideActionView.delegate = self
         self.view.addSubview(self.rideActionView)
@@ -229,7 +265,7 @@ final class HomeController: UIViewController {
         
         self.mapView.delegate = self
     }
-    
+    // settingController에서 데이터를 저장
     private func configureSavedUserLocations() {
         guard let user = self.user else { return }
         
@@ -243,7 +279,7 @@ final class HomeController: UIViewController {
             self.geocodeAddressString(address: workLocation)
         }
     }
-    
+    // LocationInputCell(tableView)에 저장될 (home / work) 위치 데이터
     private func geocodeAddressString(address: String) {
         let geocoder = CLGeocoder()
         
@@ -261,16 +297,18 @@ final class HomeController: UIViewController {
     
     
     // MARK: - Helper Functions
-    // 왼쪽 상단 버튼의 용도를 바꾸는 메서드
+    // 왼쪽 상단 버튼의 이미지 및 용도를 바꾸는 메서드
+        // 바뀐 용도는 Selector - actionButtonPressed에서 실행됨
     private func configureActionButton(config: ActionButtonConfiguration) {
         switch config {
         case .ShowMenu:
             self.actionButton.setImage(#imageLiteral(resourceName: "baseline_menu_black_36dp").withRenderingMode(.alwaysOriginal), for: .normal)
             self.actionButtonConfig = .ShowMenu
             
+            
         case .dismissActionView:
             self.actionButton.setImage(#imageLiteral(resourceName: "baseline_arrow_back_black_36dp").withRenderingMode(.alwaysOriginal), for: .normal)
-            actionButtonConfig = .dismissActionView
+            self.actionButtonConfig = .dismissActionView
         }
     }
     
@@ -285,9 +323,11 @@ final class HomeController: UIViewController {
     
     
     // 밑에서 화면이 나옴
+    // true 일 때
         // config에 따라 모든 것이 바뀜
         // config == 현재 passenger 및 driver의 상태를 알려주는 열거형
-    
+    // false 일 때
+        // rideActionView 내리기
     
     // passenger인 상태
         // 1. 테이블뷰에서 셀을 선택했을 때
@@ -336,6 +376,7 @@ final class HomeController: UIViewController {
     
     // MARK: - Passenger API
     // passenger에게 trip의 현재 상태를 알려주는 함수
+    // rideActionView의 레이블 / 버튼의 텍스트도 바꿈
     private func observeCurrentTrip() {
         
         self.passengerService.observeCurrentTrip { trip in
@@ -393,7 +434,9 @@ final class HomeController: UIViewController {
             case .completed:
                 // DB에서 trip데이터 삭제
                 self.passengerService.deleteTrip { error, ref in
+                    // rideActionView내리기
                     self.animateRideActionView(shouldShow: false)
+                    // 화면을 자기 중심으로 확대, 축소
                     self.centerMapOnUserLocation()
                     // 버튼 이미지 바꾸기
                     self.configureActionButton(config: .ShowMenu)
@@ -505,8 +548,6 @@ final class HomeController: UIViewController {
         self.configureUI()
 
         self.enableLoactionServices()
-        
-        
     }
 }
 
@@ -524,15 +565,23 @@ extension HomeController: CLLocationManagerDelegate {
         case .notDetermined:
             print("DEBUG: Not determined..")
             self.locationManager?.requestWhenInUseAuthorization()
+            
+            
         case .restricted, .denied:
             print("DEBUG: break")
+            
+            
         case .authorizedAlways:
             print("DEBUG: Auth always..")
             self.locationManager?.startUpdatingLocation()
+            
+            
         case .authorizedWhenInUse:
             print("DEBUG: Auth when in use..")
             self.locationManager?.requestAlwaysAuthorization()
             self.locationManager?.desiredAccuracy = kCLLocationAccuracyBest
+            
+            
         @unknown default:
             print("DEBUG: default")
             break
@@ -577,7 +626,7 @@ extension HomeController: CLLocationManagerDelegate {
 
 // MARK: - MapView Helper Functions
 private extension HomeController {
-    
+    // 검색 기능 사용
     private func searchBy(naturalLanguageQuery: String, completion: @escaping ([MKPlacemark]) -> Void) {
         
         var results = [MKPlacemark]()
@@ -601,7 +650,7 @@ private extension HomeController {
             completion(results)
         }
     }
-    
+    // polyLine 만드는 함수
     func generatePolyline(toDestination destination: MKMapItem) {
         // 요청서를 만듦
         let request = MKDirections.Request()
@@ -625,7 +674,7 @@ private extension HomeController {
             self.mapView.addOverlay(polyline)
         }
     }
-    
+    // 주석 및 polyline 삭제
     func removeAnnotationsAndOverlays() {
         // 주석 삭제
         self.mapView.annotations.forEach { annotation in
@@ -660,10 +709,7 @@ private extension HomeController {
         self.locationManager?.startMonitoring(for: region)
     }
     
-    
-    
-    // driver와 passenger의 위치에 따라
-        // 두 사용자가 한 화면에 다 나올 수 있도록 -> 맵뷰를 확대, 축소를 해줌
+    // 두 사용자(driver와 passenger)가 한 화면에 다 나올 수 있도록 -> 맵뷰를 확대, 축소를 해줌
     private func zoomForActiveTrip(withDriverUid uid: String) {
         // 주석 배열 만들기
         var annotations = [MKAnnotation]()
@@ -757,30 +803,28 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
     }
     
     // didSelectRowAt
+        // 테이블뷰에서 셀을 선택하면
+            // -> 버튼 바꾸기 (
+            //
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        // 버튼 바꾸기 (뒤로가기 버튼)
+        self.configureActionButton(config: .dismissActionView)
         
         // address 불러오기
         let selectedPlacemark = indexPath.section == 0 ? savedLocations[indexPath.row] : searchResults[indexPath.row]
-        
-        // 버튼 바꾸기
-        self.configureActionButton(config: .dismissActionView)
         // 도착지를 맵 아이템으로 만들기
         let destination = MKMapItem(placemark: selectedPlacemark)
         // polyline(경로에 선) 만들기
             // 지도에 코드를 작성해야 보임
         self.generatePolyline(toDestination: destination)
         
+        // locationInputView를 화면에서 안 보이게 설정 후
+            // -> RideActionView를 화면에 보이도록 표시
+            // -> mapView에서 주석 및 polyline 설정
+            // -> + 줌
         self.dismissLocationView { completion in
-//            // 새로운 도착지 주석 만들기
-//            let annotation = MKPointAnnotation()
-//            annotation.coordinate = selectedPlacemark.coordinate
-//            self.mapView.addAnnotation(annotation)
-//
-//            // 주석의 크기를 키우고 애니메이션을 추가
-//            self.mapView.selectAnnotation(annotation, animated: true)
-            
-            // 위의 코드를 리팩토링한 코드
-                // 주석 달기 + 주석 크기 키우기
+            // 주석 달기 + 주석 크기 키우기
             self.mapView.addAnnotationAndSelect(forPlacemark: selectedPlacemark.coordinate)
             // #0 은 해당 배열의 각 주석을 나타냄
             // isKind(of: _ )는 특정 객체가 어떤 종류의 요소인지 같은 종류의 클래스를 감지한다.
@@ -788,8 +832,10 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
             let annotations = self.mapView.annotations.filter({ !$0.isKind(of: DriverAnnotation.self) })
             // Zoom
             self.mapView.zoomToFit(annotations: annotations)
-            // 뷰 생성
-            self.animateRideActionView(shouldShow: true, destination: selectedPlacemark, config: .requestRide)
+            // rideActionView 뷰 올라오게 하기
+            self.animateRideActionView(shouldShow: true,
+                                       destination: selectedPlacemark,
+                                       config: .requestRide)
         }
     }
 }
@@ -797,19 +843,22 @@ extension HomeController: UITableViewDelegate, UITableViewDataSource {
 
 // MARK: - MKMapViewDelegate
 extension HomeController: MKMapViewDelegate {
-    
+    // 사용자가 driver인 경우
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
         guard let user = self.user else { return }
         
         // 1. 사용자가 driver인 경우에만 driver의 위치 업데이트
         // 2. 사용자의 위치가 바뀜 -> 여기서 user가 바뀜 -> user의 didSet -> 사용자가 passenger라면
             // -> fetchDrivers() -> zoomForActiveTrip -> 자동으로 카메라가 맞춰짐
-        guard user.accountType == .driver else { return }
-        guard let userLocation = userLocation.location else { return }
-        // driver의 위치 업데이트
-        self.driverService.updateDriverLoction(location: userLocation)
+//        guard user.accountType == .driver else { return }
+        if user.accountType == .driver {
+            guard let userLocation = userLocation.location else { return }
+            // driver의 위치 업데이트
+            self.driverService.updateDriverLoction(location: userLocation)
+        }
     }
     
+    // 사용자가 driver인 경우
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         // driver의 주석이면.
         if let annotation = annotation as? DriverAnnotation {
@@ -821,7 +870,7 @@ extension HomeController: MKMapViewDelegate {
         }
         return nil
     }
-    
+    // polyline 설정
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         if let route = self.route {
             let polyline = route.polyline
@@ -839,7 +888,8 @@ extension HomeController: MKMapViewDelegate {
 
 // MARK: - RideActionViewDelegate
 extension HomeController: RideActionViewDelegate {
-    // 여기 원래 trip을 파라미터로 받음 -> 나중에 차이점 확인해보기
+    // 사용자가 passenger인 경우
+        // - 여기 원래 trip을 파라미터로 받음 -> 나중에 차이점 확인해보기
     func uploadTrip() {
         guard let pickerCoordinates = locationManager?.location?.coordinate else { return }
         
@@ -851,6 +901,7 @@ extension HomeController: RideActionViewDelegate {
         guard let destinationCoordinates = self.rideActionView.destination?.coordinate else { return }
         
         // 유저(passenger)의 위치와 도착지의 위치를 DB에 넣는 과정
+            // driver가 accept trip버튼을 누르면 이 데이터를 가져감
         passengerService.uploadTrip(pickerCoordinates, destinationCoordinates) { error, ref in
             if let error = error {
                 print("DEBUG: Frailed to upload trip with error \(error)")
@@ -862,6 +913,7 @@ extension HomeController: RideActionViewDelegate {
             }
         }
     }
+    
     // 사용자가 passenger인 경우
         // passenger가 cancel을 누르면 이 함수가 실행 됨
     func cancelTrip() {
@@ -876,23 +928,34 @@ extension HomeController: RideActionViewDelegate {
             self.animateRideActionView(shouldShow: false)
             // 주석 및 polyline 지우기
             self.removeAnnotationsAndOverlays()
-            // 버튼 바꾸기
-            self.actionButton.setImage(#imageLiteral(resourceName: "baseline_menu_black_36dp").withRenderingMode(.alwaysOriginal), for: .normal)
-            self.actionButtonConfig = .ShowMenu
+            // 버튼 용도 바꾸기
+            self.configureActionButton(config: .ShowMenu)
             
             UIView.animate(withDuration: 0.3) {
                 self.inputActivationView.alpha = 1
             }
         }
     }
+    
+    
+    
+    
+    // 사용자가 driver인 경우
     func pickupPassenger() {
         self.startTrip()
     }
+    
+    // 사용자가 driver인 경우
     func dropOffPassenger() {
         guard let trip = self.trip else { return }
+        // driverService -> updateTripState
+        // 만약 .completed 일 때 passenger의 observe 들을 모두 지움
         self.driverService.updateTripState(trip: trip, state: .completed) { error, ref in
+            // 주석 및 polyline 지우기
             self.removeAnnotationsAndOverlays()
+            // 사용자에 맞게 화면 확대 or 축소
             self.centerMapOnUserLocation()
+            // driver의 rideActionView내리기
             self.animateRideActionView(shouldShow: false)
         }
     }
@@ -907,19 +970,10 @@ extension HomeController: PickupControllerDelegate {
         // trip 업데이트
             // Service -> updateTripState
         self.trip = trip
-        // 주석 만들기
-        let anno = MKPointAnnotation()
-        anno.coordinate = trip.pickupCoordinates
-        self.mapView.addAnnotation(anno)
         
-        
-        
-        // 주석의 크기를 키움
-        self.mapView.selectAnnotation(anno, animated: true)
-        
+        // 주석 만들기 + 주석의 크기를 키움
         self.mapView.addAnnotationAndSelect(forPlacemark: trip.pickupCoordinates)
 
-        
         // circular region
         // drivedArrived 이후
         self.setCustomRegion(withType: .pickup,

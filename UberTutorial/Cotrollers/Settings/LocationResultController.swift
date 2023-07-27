@@ -30,7 +30,8 @@ final class LocationResultController: UITableViewController {
     // MARK: - API
     private func setRegion() {
         guard let location = LocationHandler.shared.locationManager.location else { return }
-
+        
+        self.searchCompleter.delegate = self
         let region = MKCoordinateRegion(center: location.coordinate,
                                         latitudinalMeters: 2000,
                                         longitudinalMeters: 2000)
@@ -87,11 +88,10 @@ extension LocationResultController {
         let subtitle = result.subtitle
         let locationString = "\(title) \(subtitle)"
         
-        self.dismiss(animated: true)
-        
-        self.delegate?.searchResultLocation(locationString: locationString)
-        
-        print(locationString)
+        self.dismiss(animated: true) {
+            self.delegate?.searchResultLocation(locationString: locationString)
+        }
+//        print(locationString)
     }
 }
 

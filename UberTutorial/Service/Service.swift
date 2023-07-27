@@ -15,10 +15,9 @@ struct DriverService {
     static let shared = DriverService()
     init() {}
     
-    // 사용자가 driver인 경우
-        // passenger가 uploadTrip을 사용할 경우
-        // observe(.childAdded)를 통해서 통보를 받음
-            // 화면 전환
+    // passenger가 uploadTrip(도착지를 선정하고 driver찾기)을 시작한 경우
+        // trip데이터가 추가되면 observe(.childAdded)를 통해서 통보를 받음
+            // completion을 통해 + 화면 전환
     func observeTrips(completion: @escaping (Trip) -> Void) {
         // observe(.childAdded) <<<<<----- 중요!!!
         REF_TRIPS.observe(.childAdded) { snapshot in

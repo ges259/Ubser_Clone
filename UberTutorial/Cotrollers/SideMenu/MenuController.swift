@@ -11,7 +11,7 @@ final class MenuController: UITableViewController {
     
     // MARK: - Properties
     private let user: User
-    
+    // ContainerController
     weak var delegate: MenuControllerDelegate?
     
     private lazy var menuHeader: MenuHeader = {

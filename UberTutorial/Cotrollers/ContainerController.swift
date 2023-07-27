@@ -33,7 +33,7 @@ final class ContainerController: UIViewController {
     
     @objc private func dismissMenu() {
         self.isExpanded = false
-        animateMenu(shouldExpand: isExpanded)
+        self.animateMenu(shouldExpand: isExpanded)
     }
     
     
@@ -64,14 +64,10 @@ final class ContainerController: UIViewController {
     
     
     
-    
-    
-    
     // MARK: - Helper Functions
     private func configureHomeController() {
         // delegate
         self.homeController.delegate = self
-        
         // addChild: 특정 ViewController를 현재 ViewController의 자식으로 설정
             // 추후에 child 사용을 대비하여 넣어놓는 것
         self.addChild(self.homeController)
@@ -83,7 +79,6 @@ final class ContainerController: UIViewController {
         
         // 추가된 childVC의 View가 보일 수 있도록 맨 앞으로 등장하게 하는 것
         self.view.addSubview(self.homeController.view)
-        
     }
     
     private func configureMenuController(withUser user: User) {
@@ -92,7 +87,6 @@ final class ContainerController: UIViewController {
         
         // delegate 설정
         self.menuController.delegate = self
-        
         
         self.addChild(self.menuController)
         self.menuController.didMove(toParent: self)
@@ -109,7 +103,6 @@ final class ContainerController: UIViewController {
                                                 y: 40,
                                                 width: self.view.frame.width,
                                                 height: self.view.frame.height - 40)
-        
         // 오른쪽 빈공간에 blackView 만들기
         self.configureBlackView()
     }

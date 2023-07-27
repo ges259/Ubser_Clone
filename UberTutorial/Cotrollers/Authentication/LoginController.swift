@@ -48,36 +48,36 @@ final class LoginController: UIViewController {
         return UITextField().textField(withPlaceholder: "Email")
     }()
     private let passwordTextField: UITextField = {
-        return UITextField().textField(withPlaceholder: "pasword", isSecureTextEntry: true)
+        return UITextField().textField(withPlaceholder: "pasword",
+                                       isSecureTextEntry: true)
     }()
     
     
     
     // MARK: - Button
-    private let loginButton: AuthButton = {
-        let btn = AuthButton(type: .system)
-        
-        btn.setTitle("Log In", for: .normal)
-        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+    private lazy var loginButton: UIButton = {
+        let btn = UIButton().button(title: "Log In",
+                                    fontName: .bold,
+                                    fontSize: 20,
+                                    Auth: true)
         
         btn.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
         
         return btn
     }()
-    private let dontHaveAccountButton: UIButton = {
-        let btn = UIButton(type: .system)
-        
-        let attributedTitle = NSMutableAttributedString(
-            string: "Don't have an account?   ",
-            attributes: [NSAttributedString.Key.font : UIFont.systemFont(ofSize: 16),
-                         NSAttributedString.Key.foregroundColor : UIColor.lightGray]
-        )
-        attributedTitle.append(NSAttributedString(
-            string: "Sign Up",
-            attributes: [NSAttributedString.Key.font : UIFont.boldSystemFont(ofSize: 16),
-                         NSAttributedString.Key.foregroundColor : UIColor.mainBlueColor])
-        )
-        btn.setAttributedTitle(attributedTitle, for: .normal)
+    private lazy var dontHaveAccountButton: UIButton = {
+        let btn = UIButton().mutableAttributedString(
+            buttonType: .system,
+            
+            type1TextString: "Don't have an account?   ",
+            type1FontName: .system,
+            type1FontSize: 16,
+            type1Foreground: UIColor.lightGray,
+            
+            type2TextString: "Sign Up",
+            type2FontName: .bold,
+            type2FontSize: 16,
+            type2Foreground: UIColor.mainBlueColor)
         
         btn.addTarget(self, action: #selector(HandleShowSignUp), for: .touchUpInside)
         
@@ -88,13 +88,14 @@ final class LoginController: UIViewController {
     
     // MARK: - StackView
     private lazy var stackView: UIStackView = {
-        return UIStackView().stackView(arrangedSubviews: [self.emailContainerView,
-                                                          self.passwordContainerView,
-                                                          self.loginButton],
-                                       axis: .vertical,
-                                       distribution: .fillEqually,
-                                       alignment: .fill,
-                                       spacing: 16)
+        return UIStackView().stackView(
+            arrangedSubviews: [self.emailContainerView,
+                               self.passwordContainerView,
+                               self.loginButton],
+            axis: .vertical,
+            distribution: .fillEqually,
+            alignment: .fill,
+            spacing: 16)
     }()
     
     

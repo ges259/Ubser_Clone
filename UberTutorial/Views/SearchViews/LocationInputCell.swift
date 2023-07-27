@@ -20,15 +20,6 @@ final class LocationInputCell: UITableViewCell {
         }
     }
     
-//    // SettingController (menu -> settings)
-//    var type: LocationType? {
-//        didSet {
-//            self.titleLabel.text = type?.description
-//            self.addressLabel.text = type?.subtitle
-//        }
-//    }
-    
-    
     
     // MARK: - Layout
     let titleLabel: UILabel = {
@@ -47,7 +38,7 @@ final class LocationInputCell: UITableViewCell {
     // MARK: - StackView
     private lazy var stackView: UIStackView = {
         return UIStackView().stackView(arrangedSubviews: [self.titleLabel,
-                                                self.addressLabel],
+                                                          self.addressLabel],
                                        axis: .vertical,
                                        distribution: .fillEqually,
                                        spacing: 4)

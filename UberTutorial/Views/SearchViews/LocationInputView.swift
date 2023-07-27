@@ -22,9 +22,11 @@ final class LocationInputView: UIView {
     
     // MARK: - Button
     private lazy var backButton: UIButton = {
-        let btn = UIButton(type: .system)
+        let btn = UIButton().button(title: nil,
+                                    fontName: nil,
+                                    fontSize: nil,
+                                    image: "baseline_arrow_back_black_36dp")
         
-        btn.setImage(#imageLiteral(resourceName: "baseline_arrow_back_black_36dp").withRenderingMode(.alwaysOriginal), for: .normal)
         btn.addTarget(self, action: #selector(handleBackTapped), for: .touchUpInside)
         
         return btn
@@ -34,8 +36,7 @@ final class LocationInputView: UIView {
     
     // MARK: - Label
     private let titleLabel: UILabel = {
-        return UILabel().label(labelText: "GES",
-                               LabelTextColor: UIColor.darkGray,
+        return UILabel().label(LabelTextColor: UIColor.darkGray,
                                fontName: .system,
                                fontSize: 16)
     }()

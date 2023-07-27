@@ -15,10 +15,6 @@ final class UserInfoHeader: UIView {
     
     
     
-    
-    
-    
-    
     // MARK: - Layout
     private lazy var profileView: UIView = {
         return UIView().backgrouncColorView(backgroundColor: .darkGray)
@@ -26,7 +22,7 @@ final class UserInfoHeader: UIView {
     
     
     
-    
+    // MARK: - Label
     private lazy var initialLabel: UILabel = {
         return UILabel().label(labelText: self.user.firstInitial,
                                LabelTextColor: .white,
@@ -44,6 +40,9 @@ final class UserInfoHeader: UIView {
                                fontSize: 14)
     }()
     
+    
+    
+    // MARK: - StackView
     private lazy var stackView: UIStackView = {
         return UIStackView().stackView(arrangedSubviews: [self.fullNameLabel,
                                                           self.emailLabel],
@@ -51,7 +50,6 @@ final class UserInfoHeader: UIView {
                                        distribution: .fillEqually,
                                        spacing: 4)
     }()
-    
     
     
     
@@ -84,7 +82,6 @@ final class UserInfoHeader: UIView {
         self.profileView.addSubview(self.initialLabel)
         self.initialLabel.anchor(centerX: self.profileView,
                                  centerY: self.profileView)
-        
         
         // stackView
         self.addSubview(self.stackView)

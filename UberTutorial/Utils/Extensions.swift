@@ -83,6 +83,7 @@ extension UILabel {
     
     func label(labelText: String? = nil,
                LabelTextColor: UIColor? = .darkGray,
+               
                fontName: FontStyle? = .system,
                fontSize: CGFloat? = nil)
     -> UILabel {
@@ -143,21 +144,25 @@ extension UIStackView {
 
 // MARK: - UIButton
 extension UIButton {
-
-    func button(type: UIButton.ButtonType,
-                title: String? = "",
-                textColor: UIColor? = UIColor.black,
-                backgroundColor: UIColor? = .clear,
-                fontName: FontStyle? = .system,
-                fontSize: CGFloat? = 18,
-                image: String? = nil) {
+    // type: UIButton.ButtonType,
+    func button(title: String?,
+                titleColor: UIColor? = nil,
+                
+                fontName: FontStyle?,
+                fontSize: CGFloat?,
+                
+                backgroundColor: UIColor? = nil,
+                
+                image: String? = nil,
+                Auth: Bool? = false)
+    -> UIButton {
         // type
-        let btn = UIButton(type: type)
+        let btn = UIButton(type: .system)
 
         // text
         if let title = title {
             btn.setTitle(title, for: .normal)
-            btn.titleLabel?.textColor = textColor
+            btn.setTitleColor(titleColor, for: .normal)
         }
         
         // font
@@ -170,11 +175,61 @@ extension UIButton {
                 btn.titleLabel?.font = UIFont(name: "Avenir-Light", size: fontSize)
             }
         }
-
+        
+        // background Color
+        if let backgroundColor = backgroundColor {
+            btn.backgroundColor = backgroundColor
+        }
+        
         // image
         if let image = image {
-            btn.setImage(#imageLiteral(resourceName: image), for: .normal)
+            btn.setImage(#imageLiteral(resourceName: image).withRenderingMode(.alwaysOriginal), for: .normal)
         }
+        
+        // Auth -> Log In / Log Out 에서 사용
+        if Auth! {
+            btn.setTitleColor(UIColor(white: 1, alpha: 0.5), for: .normal)
+            btn.backgroundColor = UIColor.mainBlueColor
+            btn.clipsToBounds = true
+            btn.layer.cornerRadius = 5
+
+            btn.anchor(height: 50)
+        }
+        return btn
+    }
+    
+    func mutableAttributedString(buttonType: UIButton.ButtonType,
+                                 
+                                 type1TextString: String,
+                                 type1FontName: FontStyle,
+                                 type1FontSize: CGFloat,
+                                 type1Foreground: UIColor,
+                                 
+                                 type2TextString: String,
+                                 type2FontName: FontStyle,
+                                 type2FontSize: CGFloat,
+                                 type2Foreground: UIColor) -> UIButton {
+        let attributedButton = UIButton()
+                                     
+        // UIFont 설정
+        let type1Font: UIFont = type1FontName == FontStyle.system ? UIFont.systemFont(ofSize: type1FontSize) : UIFont.boldSystemFont(ofSize: type1FontSize)
+        
+        let type2Font: UIFont = type2FontName == FontStyle.system ? UIFont.systemFont(ofSize: type1FontSize) : UIFont.boldSystemFont(ofSize: type1FontSize)
+        
+        // Mutable_Attributed_String 설정
+        let attributedTitle = NSMutableAttributedString(
+            string: type1TextString,
+            attributes: [NSAttributedString.Key.font : type1Font,
+                         NSAttributedString.Key.foregroundColor : type1Foreground]
+        )
+        attributedTitle.append(NSAttributedString(
+            string: type2TextString,
+            attributes: [NSAttributedString.Key.font : type2Font,
+                         NSAttributedString.Key.foregroundColor : type2Foreground])
+        )
+        attributedButton.setAttributedTitle(attributedTitle, for: .normal)
+        
+        return attributedButton
     }
 }
 
@@ -279,7 +334,6 @@ extension UIView {
         if let trailing = trailing {
             self.trailingAnchor.constraint(equalTo: trailing, constant: -paddingTrailing).isActive = true
         }
-        
         if let width = width {
             self.widthAnchor.constraint(equalToConstant: width).isActive = true
         }
@@ -320,8 +374,8 @@ extension UIView {
 
 
 
+// MARK: - MKPlacemark
 extension MKPlacemark {
-    
     var address: String? {
         get {
             guard let subThoroughfare = subThoroughfare else { return nil }
@@ -353,6 +407,7 @@ extension MKMapView {
         let insets = UIEdgeInsets(top: 120, left: 100, bottom: 350, right: 100)
         setVisibleMapRect(zoomRect, edgePadding: insets, animated: true)
     }
+    
     // 주석 만드는 코드
     func addAnnotationAndSelect(forPlacemark coordinate: CLLocationCoordinate2D) {
         // 주석 달기
