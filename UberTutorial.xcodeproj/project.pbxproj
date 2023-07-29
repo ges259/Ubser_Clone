@@ -34,6 +34,7 @@
 		5F56A0EC2A6817BA00CD1825 /* DB_Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0EB2A6817BA00CD1825 /* DB_Constants.swift */; };
 		5F56A0EE2A68302800CD1825 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0ED2A68302800CD1825 /* User.swift */; };
 		5F56A0F02A6841C400CD1825 /* LocationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F56A0EF2A6841C400CD1825 /* LocationHandler.swift */; };
+		5F6A8A612A72F77900BF8928 /* SettingContainerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F6A8A602A72F77900BF8928 /* SettingContainerController.swift */; };
 		5F9A9D322A6B15C600A304F2 /* Enum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9A9D312A6B15C600A304F2 /* Enum.swift */; };
 		5F9EB6532A6932440043E6C7 /* DriverAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9EB6522A6932440043E6C7 /* DriverAnnotation.swift */; };
 		5F9EB6552A69AFCF0043E6C7 /* RideActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F9EB6542A69AFCF0043E6C7 /* RideActionView.swift */; };
@@ -71,6 +72,7 @@
 		5F56A0EB2A6817BA00CD1825 /* DB_Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DB_Constants.swift; sourceTree = "<group>"; };
 		5F56A0ED2A68302800CD1825 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		5F56A0EF2A6841C400CD1825 /* LocationHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHandler.swift; sourceTree = "<group>"; };
+		5F6A8A602A72F77900BF8928 /* SettingContainerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingContainerController.swift; sourceTree = "<group>"; };
 		5F8C3C2A2A6666920085C010 /* UberTutorial.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = UberTutorial.entitlements; sourceTree = "<group>"; };
 		5F9A9D312A6B15C600A304F2 /* Enum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Enum.swift; sourceTree = "<group>"; };
 		5F9EB6522A6932440043E6C7 /* DriverAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriverAnnotation.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 		5F3A63482A6ED5C900581DC8 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				5F6A8A602A72F77900BF8928 /* SettingContainerController.swift */,
 				5F3A63442A6EB5C600581DC8 /* SettingController.swift */,
 				5F3A63492A6ED5E500581DC8 /* AddLocationController.swift */,
 				5FD613BE2A7003C20044E870 /* LocationResultController.swift */,
@@ -415,6 +418,7 @@
 				5F56A0EE2A68302800CD1825 /* User.swift in Sources */,
 				5F2B29632A6A8D4400385E4C /* PickupController.swift in Sources */,
 				5F56A0E82A67D58D00CD1825 /* String_Constants.swift in Sources */,
+				5F6A8A612A72F77900BF8928 /* SettingContainerController.swift in Sources */,
 				5F3A633F2A6E6A5300581DC8 /* MenuController.swift in Sources */,
 				5F4414652A6560F700BAF781 /* LoginController.swift in Sources */,
 				5F56A0DC2A6707CA00CD1825 /* LocationInputActivationView.swift in Sources */,

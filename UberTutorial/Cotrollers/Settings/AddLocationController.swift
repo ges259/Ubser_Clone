@@ -16,9 +16,9 @@ final class AddLocationController: UIViewController {
     lazy var type: LocationType = .home
     
     // settingController
-    weak var delegate: AddLocationControllerDelegate?
+    weak var delegate1: AddLocationControllerDelegate?
     
-    
+    var delegate: AddLocationControllerDelegate2?
     
     private let localResultController = LocationResultController()
 
@@ -78,12 +78,14 @@ final class AddLocationController: UIViewController {
     
     
     
+    
     // MARK: - Configure UI
     private func configureUI() {
         self.view.backgroundColor = .white
         self.view.addSubview(self.textLabel)
         self.textLabel.anchor(centerX: self.view,
-                         centerY: self.view, paddingCenterY: -100)
+                              centerY: self.view,
+                              paddingCenterY: -100)
     }
 }
 
@@ -110,7 +112,13 @@ extension AddLocationController: LocationResultControllerDelegate {
     
     func searchResultLocation(locationString: String) {
         
-        self.delegate?.updateLocation(locationString: locationString, type: self.type)
+//        self.delegate?.updateLocation(locationString: locationString, type: self.type)
+        
+//        self.delegate?.popToSetting()
+        
+        
+        self.delegate1?.updateLocation(locationString: locationString, type: .home)
+//        self.navigationController?.navigationController?.popViewController(animated: true)
         
         // MARK: - BUG
         // 아예 settingController를 나감

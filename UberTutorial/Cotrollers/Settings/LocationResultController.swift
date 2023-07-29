@@ -103,6 +103,7 @@ extension LocationResultController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         // 검색 텍스트가 변경될 때마다 -> 쿼리 조각을 설정. -> 테이블 뷰 업데이트
         self.searchCompleter.queryFragment = searchText
+
     }
 }
 
