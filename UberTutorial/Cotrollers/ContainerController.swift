@@ -33,7 +33,7 @@ final class ContainerController: UIViewController {
     
     @objc private func dismissMenu() {
         self.isExpanded = false
-        self.animateMenu(shouldExpand: self.isExpanded)
+        self.animateMenu(shouldExpand: isExpanded)
     }
     
     
@@ -139,6 +139,7 @@ final class ContainerController: UIViewController {
                 self.moveBlackView(shouldShrink: shouldExpand)
             },completion: completion)
         }
+        
         self.animateStatusBar()
     }
     
@@ -253,9 +254,9 @@ extension ContainerController: MenuControllerDelegate {
             case .settings:
                 guard let user = self.user else { return }
                 
-                let settingController = SettingController(user: user)
+                let settingController = settingController(user: user)
                 // delegate
-//                settingController.delegate = self
+                settingController.delegate = self
                 
                 let nav = UINavigationController(rootViewController: settingController)
                 
@@ -284,7 +285,7 @@ extension ContainerController: MenuControllerDelegate {
 // MARK: - SettingsControllerDelegate
 extension ContainerController: SettingsControllerDelegate {
     
-    func updateUser(_ controller: SettingController) {
+    func updateUser(_ controller: settingController) {
         self.user = controller.user
     }
 }

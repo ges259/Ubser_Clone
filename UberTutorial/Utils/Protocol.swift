@@ -40,21 +40,10 @@ protocol AddLocationControllerDelegate: AnyObject {
 
 
 protocol SettingsControllerDelegate: AnyObject {
-    func updateUser(_ controller: SettingController)
+    func updateUser(_ controller: settingController)
 }
 
 protocol LocationResultControllerDelegate: AnyObject {
     // , type: LocationType
     func searchResultLocation(locationString: String)
-}
-
-
-
-// SettingControllerConatiner
-protocol AddLocationControllerDelegate2: AnyObject {
-    func popToSetting()
-}
-
-protocol SettingContainerDelegate2: AnyObject {
-    func didSelectedCell(type: LocationType)
 }
