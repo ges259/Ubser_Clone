@@ -103,7 +103,7 @@ final class RideActionView: UIView {
                                     fontSize: 20,
                                     backgroundColor: UIColor.black)
         
-        btn.addTarget(self, action: #selector(actionButtonPressed), for: .touchUpInside)
+        btn.addTarget(self, action: #selector(self.actionButtonPressed), for: .touchUpInside)
         
         return btn
     }()
@@ -182,6 +182,7 @@ final class RideActionView: UIView {
                                  paddingTrailing: 12,
                                  height: 50)
     }
+    
     
     
     // MARK: - Helper Function

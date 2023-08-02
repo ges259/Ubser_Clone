@@ -100,11 +100,11 @@ final class LocationInputView: UIView {
         // configure UI
         self.addSubview(self.backButton)
         self.backButton.anchor(top: self.safeAreaLayoutGuide.topAnchor,
-                               paddingTop: 0,
+                               paddingTop: 12,
                                leading: self.leadingAnchor,
                                paddingLeading: 12,
-                               width: 30,
-                               height: 30)
+                               width: 34,
+                               height: 33)
         
         self.addSubview(self.titleLabel)
         self.titleLabel.anchor(centerX: self, centerY: self.backButton)

@@ -16,8 +16,11 @@ final class DriverAnnotation: NSObject, MKAnnotation {
         self.uid = uid
         self.coordinate = coordinate
     }
+    
+    // driver의 위치가 바뀌면 -> driver의 주석을 바꿔야 함
+    
     // 주석을 업데이트할 때 사용하는 함수
-        // driver의 위치가 바뀌면 -> 이 함수가 호출
+        // driver의 위치가 바뀌면 -> 이 함수가 호출되도록
             // 그에 따라 driver의 위치를 화면에 재설정
     func updateAnnotationPosition(withCoodinate coordinate: CLLocationCoordinate2D) {
         

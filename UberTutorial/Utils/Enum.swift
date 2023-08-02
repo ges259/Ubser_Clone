@@ -23,11 +23,11 @@ enum TripState: Int {
 }
 // HomeController
 enum ActionButtonConfiguration {
-    case ShowMenu
+    case showMenu
     case dismissActionView
     
     init() {
-        self = .ShowMenu
+        self = .showMenu
     }
 }
 enum AnnotationType: String {

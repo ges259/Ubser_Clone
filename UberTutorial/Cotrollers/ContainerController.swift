@@ -16,8 +16,12 @@ final class ContainerController: UIViewController {
     private var menuController: MenuController!
     private let blackView = UIView()
     
+    // true -> menu 활성화
+    // false -> menu 숨기기
     private var isExpanded = false
     
+    // self.view.frame.width만 할 경우 화면을 다 덮음 ( 왼 -> 오 )
+    // self.view.frame.width - 80 => 오른쪽에 80만큼 공백 두기
     private lazy var xOrigin = self.view.frame.width - 80
 
     
@@ -30,10 +34,9 @@ final class ContainerController: UIViewController {
     }
     
     // MARK: - Selectors
-    
     @objc private func dismissMenu() {
         self.isExpanded = false
-        self.animateMenu(shouldExpand: isExpanded)
+        self.animateMenu(shouldExpand: self.isExpanded)
     }
     
     
@@ -63,8 +66,20 @@ final class ContainerController: UIViewController {
     }
     
     
+
+    // MARK: - Configure UI
+    // 1. checkIfUserIsLoggedIn()
+        // -> login 상태일 때 호출됨
+    // 2. 로그인 / 회원가입 시 따로 호출 됨
+    func configure() {
+        // headerView의 윗부분에 검정색을 가리기 위해 필요
+        self.view.backgroundColor = UIColor.backgroundColor
+        
+        self.configureHomeController()
+        
+        self.fetchUserData()
+    }
     
-    // MARK: - Helper Functions
     private func configureHomeController() {
         // delegate
         self.homeController.delegate = self
@@ -107,43 +122,27 @@ final class ContainerController: UIViewController {
         self.configureBlackView()
     }
     
-    
-    
-    
-    private func animateMenu(shouldExpand: Bool, completion: ((Bool) -> Void)? = nil) {
+    // configure blackView
+        // frame
+        // gesture
+        // alpha
+        // addSubView
+    private func configureBlackView() {
+        self.blackView.frame = CGRect(x: 0,
+                                      y: 0,
+                                      width: self.view.frame.width,
+                                      height: self.view.frame.height)
+        self.blackView.backgroundColor = UIColor(white: 0, alpha: 0.5)
+        self.blackView.alpha = 0
+        self.view.addSubview(self.blackView)
         
-        // menuController가 나옴
-        if shouldExpand {
-            UIView.animate(withDuration: 0.5,
-                           delay: 0,
-                           usingSpringWithDamping: 0.8,
-                           initialSpringVelocity: 0,
-                           options: .curveEaseInOut,
-                           animations: {
-                self.homeController.view.frame.origin.x = self.xOrigin
-                self.moveBlackView(shouldShrink: shouldExpand)
-            },completion: nil)
-
-            
-        // menuController가 들어감
-        } else {
-            self.blackView.alpha = 0
-            
-            UIView.animate(withDuration: 0.5,
-                           delay: 0,
-                           usingSpringWithDamping: 0.8,
-                           initialSpringVelocity: 0,
-                           options: .curveEaseInOut,
-                           animations: {
-                self.homeController.view.frame.origin.x = 0
-                self.moveBlackView(shouldShrink: shouldExpand)
-            },completion: completion)
-        }
-        
-        self.animateStatusBar()
+        let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissMenu))
+        self.blackView.addGestureRecognizer(tap)
     }
     
     
+    
+    // MARK: - Helper Functions
     // sign out
     private func signOut() {
         do {
@@ -158,31 +157,64 @@ final class ContainerController: UIViewController {
         }
     }
     
-    
-    private func configureBlackView() {
-        self.blackView.frame = CGRect(x: 0,
-                                      y: 0,
-                                      width: self.view.frame.width,
-                                      height: self.view.frame.height)
-        self.blackView.backgroundColor = UIColor(white: 0, alpha: 0.5)
-        self.blackView.alpha = 0
-        self.view.addSubview(self.blackView)
+    private func animateMenu(shouldExpand: Bool, completion: ((Bool) -> Void)? = nil) {
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissMenu))
-        self.blackView.addGestureRecognizer(tap)
+        // menuController가 나옴
+        if shouldExpand {
+            UIView.animate(withDuration: 0.5,
+                           delay: 0,
+                           usingSpringWithDamping: 0.8,
+                           initialSpringVelocity: 0,
+                           options: .curveEaseInOut,
+                           animations: {
+                // 메뉴가 나오면서 자연스럽게 homeController의 x좌표가 0 -> self.xOrigin으로 바뀜
+                    // homeController의 frame을 self.xOrigin로 옮김
+                self.homeController.view.frame.origin.x = self.xOrigin
+                // homeContoller의 맞춰 x좌표가 0 -> self.xOrigin으로 바뀜
+                    // blackView의 alpha를 1로 설정
+                    // blackVeiw의 frame을 self.xOrigin으로 옮김
+                // blackView의 x좌표도 움직이는 이유는 안 움직이면 menu도 같이 어두워짐
+                self.moveBlackView(shouldShrink: shouldExpand)
+            },completion: nil)
+
+            
+        // menuController가 들어감
+        } else {
+            self.blackView.alpha = 0
+            
+            UIView.animate(withDuration: 0.5,
+                           delay: 0,
+                           usingSpringWithDamping: 0.8,
+                           initialSpringVelocity: 0,
+                           options: .curveEaseInOut,
+                           animations: {
+                // 메뉴가 들어가면서 homeController의 x좌표를 self.xOrigin에서 0으로 옮김
+                    // homeController의 frame을 0으로 옮김
+                self.homeController.view.frame.origin.x = 0
+                // homeController에 맞춰 x좌표를 self.xOrigin에서 0으로 옮김
+                    // blackView의 alpha를 1로 설정
+                    // blackVeiw의 frame을 self.xOrigin으로 옮김
+                self.moveBlackView(shouldShrink: shouldExpand)
+            },completion: completion)
+        }
+        
+        self.animateStatusBar()
     }
     
-    
+    // blackView의 animation 효과
     private func moveBlackView(shouldShrink: Bool) {
         if shouldShrink {
             self.blackView.alpha = 1
             self.blackView.frame.origin.x = self.xOrigin
+            
+            
         } else {
             self.blackView.alpha = 0
             self.blackView.frame.origin.x = 0
         }
     }
     
+    // menu가 나오면 상태바를 숨김
     private func animateStatusBar() {
         UIView.animate(withDuration: 0.5,
                        delay: 0,
@@ -193,24 +225,7 @@ final class ContainerController: UIViewController {
         }, completion: nil)
     }
     
-    
-    
-    
-    
-    
-    
-    
-    func configure() {
-        // headerView의 윗부분에 검정색을 가리기 위해 필요
-        self.view.backgroundColor = UIColor.backgroundColor
-        
-        self.configureHomeController()
-        
-        self.fetchUserData()
-    }
-    
-    
-    
+
     
     // MARK: - LifeCycle
     override func viewDidLoad() {
@@ -218,7 +233,6 @@ final class ContainerController: UIViewController {
         
         self.checkIfUserIsLoggedIn()
     }
-    
     override var prefersStatusBarHidden: Bool {
         return isExpanded
     }

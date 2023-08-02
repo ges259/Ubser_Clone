@@ -70,7 +70,9 @@ struct DriverService {
     }
     
     
-    
+    // driver의 위치가 변하면
+        // homeController의 함수(890)이 자동적으로 실행 됨
+            // -> 이 함수가 불려짐 -> driver의 위치 업데이트
     func updateDriverLoction(location: CLLocation) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         let geofire = GeoFire(firebaseRef: REF_DRIVER_LOCATIONS)
@@ -85,10 +87,14 @@ struct PassengerService {
     static let shared = PassengerService()
     init() {}
     
+    // homeController에서 user의 didSet을 통해 한번 호출 됨
+    // 그 이후 observe를 통해서 데이터가 바뀔 때마다 driver의 위치를 업데이트
+    // 
+    //
     func fetchDrivers(location: CLLocation, completion: @escaping(User) -> Void) {
         
         let geofire = GeoFire(firebaseRef: REF_DRIVER_LOCATIONS)
-
+        // driver의 위치를 observe함
         REF_DRIVER_LOCATIONS.observe(.value) { snapshot in
             
             geofire.query(at: location, withRadius: 50).observe(.keyEntered, with: { uid, location in
@@ -96,7 +102,7 @@ struct PassengerService {
                 Service.shared.fetchUserData(uid: uid) { user in
                     var driver = user
                     driver.location = location
-                    
+                    // driver의 데이터
                     completion(driver)
                 }
             })
