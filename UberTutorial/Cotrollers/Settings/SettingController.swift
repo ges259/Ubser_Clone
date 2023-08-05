@@ -169,9 +169,10 @@ extension settingController: AddLocationControllerDelegate {
     
     func updateLocation(locationString: String, type: LocationType) {
         
-        PassengerService.shared.saveLocation(locationString: locationString,
-                                             type: type) { error, ref in
-            
+        self.navigationController?.popViewController(animated: true)
+        
+        PassengerService.shared.saveLocation(locationString: locationString, type: type) { error, ref in
+        
             switch type {
             case .home:
                 self.user.homeLocation = locationString

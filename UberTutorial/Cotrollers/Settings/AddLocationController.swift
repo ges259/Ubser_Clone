@@ -111,10 +111,5 @@ extension AddLocationController: LocationResultControllerDelegate {
     func searchResultLocation(locationString: String) {
         
         self.delegate?.updateLocation(locationString: locationString, type: self.type)
-        
-        // MARK: - BUG
-        // 아예 settingController를 나감
-//        dismiss(animated: true)
-//        self.searchResultController.isActive = false
     }
 }
